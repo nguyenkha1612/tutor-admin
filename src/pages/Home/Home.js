@@ -12,14 +12,13 @@ const cx = className.bind(styles);
 
 export default function Home() {
     return (
-        <div className={cx('test')}>
+        <div className={cx('homeWrapper')}>
             <FeaturedInfo />
-            <Chart data={userData} title="User Analytics" grid dataKey="Active User" />
+            <Chart data={userData} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
             <div className={cx('homeWidgets')}>
                 <WidgetSm />
                 <WidgetLg />
             </div>
-            Hi
         </div>
     );
 }

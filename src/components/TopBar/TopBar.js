@@ -11,7 +11,7 @@ function TopBar() {
         <div className={cx('topbar')}>
             <div className={cx('topbarWrapper')}>
                 <div className={cx('topLeft')}>
-                    <span className={cx('logo')}>tutor admin</span>
+                    <span className={cx('logo')}>TUTOR ADMIN</span>
                 </div>
                 <div className={cx('topRight')}>
                     <div className={cx('topbarIconContainer')}>

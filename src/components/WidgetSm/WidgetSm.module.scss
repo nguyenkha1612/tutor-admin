@@ -12,6 +12,7 @@
 }
 
 .widgetSmImg {
+    margin-right: 16px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -29,6 +30,11 @@
     align-items: center;
     justify-content: space-between;
     margin: 20px 0px;
+
+    .widgetSmListItem__left,
+    .widgetSmListItem__right {
+        display: flex;
+    }
 }
 
 .widgetSmUser {
