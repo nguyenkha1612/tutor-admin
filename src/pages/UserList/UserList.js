@@ -1,13 +1,95 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
 import { DeleteOutline } from '@mui/icons-material';
 import className from 'classnames/bind';
 
-import { userRows } from '~/dummyData';
+import DataGrid from '~/components/DataGrid';
 import styles from './UserList.module.scss';
 
 const cx = className.bind(styles);
+
+const userRows = [
+    {
+        id: 1,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 2,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 3,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 4,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 5,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 6,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 7,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 8,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 9,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+    {
+        id: 10,
+        username: 'Jon Snow',
+        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+        email: 'jon@gmail.com',
+        status: 'active',
+        transaction: '$120.00',
+    },
+];
 
 export default function UserList() {
     const [data, setData] = useState(userRows);
@@ -17,11 +99,11 @@ export default function UserList() {
     };
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'id', headerName: 'ID', flex: 0.5 },
         {
             field: 'user',
-            headerName: 'User',
-            width: 200,
+            headerName: 'Người dùng',
+            flex: 2.5,
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
@@ -31,28 +113,31 @@ export default function UserList() {
                 );
             },
         },
-        { field: 'email', headerName: 'Email', width: 200 },
+        { field: 'email', headerName: 'Email', flex: 2.5 },
         {
             field: 'status',
-            headerName: 'Status',
-            width: 120,
+            headerName: 'Trạng thái',
+            flex: 1,
         },
         {
             field: 'transaction',
-            headerName: 'Transaction Volume',
-            width: 160,
+            headerName: 'Tổng giao dịch',
+            flex: 1,
         },
         {
             field: 'action',
-            headerName: 'Action',
-            width: 150,
+            headerName: 'Chỉnh sửa',
+            flex: 1,
             renderCell: (params) => {
                 return (
                     <>
                         <Link to={'/user/' + params.row.id}>
-                            <button className={cx('userListEdit')}>Edit</button>
+                            <button className={cx('dataGridEditBtn')}>Edit</button>
                         </Link>
-                        <DeleteOutline className={cx('userListDelete')} onClick={() => handleDelete(params.row.id)} />
+                        <DeleteOutline
+                            className={cx('dataGridDeleteBtn')}
+                            onClick={() => handleDelete(params.row.id)}
+                        />
                     </>
                 );
             },

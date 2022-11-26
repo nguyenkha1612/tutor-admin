@@ -2,85 +2,95 @@ import React from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './WidgetLg.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
+const dummyData = [
+    {
+        user: {
+            id: 1,
+            userName: 'Arianmu Grandu',
+            name: 'Arianmu Grandu',
+            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
+        },
+        date: '2022-20-11',
+        total: '50.000',
+        currency: 'VNĐ',
+        status: 'Approved',
+    },
+    {
+        user: {
+            id: 2,
+            userName: 'Arianmu Grandu',
+            name: 'Arianmu Grandu',
+            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
+        },
+        date: '2022-20-11',
+        total: '60.000',
+        currency: 'VNĐ',
+        status: 'Declined',
+    },
+    {
+        user: {
+            id: 3,
+            userName: 'Arianmu Grandu',
+            name: 'Arianmu Grandu',
+            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
+        },
+        date: '2022-20-11',
+        total: '24.000',
+        currency: 'VNĐ',
+        status: 'Pending',
+    },
+    {
+        user: {
+            id: 4,
+            userName: 'Arianmu Grandu',
+            name: 'Arianmu Grandu',
+            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
+        },
+        date: '2022-20-11',
+        total: '70.000',
+        currency: 'VNĐ',
+        status: 'Approved',
+    },
+];
+
 function WidgetLg() {
     const Button = ({ type }) => {
-        let cln = 'widgetLgButton ' + type;
-        return <button className={cln}>{type}</button>;
+        return <button className={cx('widgetLgButton', type)}>{type}</button>;
     };
     return (
         <div className={cx('widgetLg')}>
-            <h3 className={cx('widgetLgTitle')}>Latest transactions</h3>
+            <h3 className={cx('widgetLgTitle')}>Giao dịch gần nhất</h3>
             <table className={cx('widgetLgTable')}>
                 <tbody>
                     <tr className={cx('widgetLgTr')}>
-                        <th className={cx('widgetLgTh')}>Customer</th>
-                        <th className={cx('widgetLgTh')}>Date</th>
-                        <th className={cx('widgetLgTh')}>Amount</th>
-                        <th className={cx('widgetLgTh')}>Status</th>
+                        <th className={cx('widgetLgTh')}>Khách hàng</th>
+                        <th className={cx('widgetLgTh')}>Ngày giao dịch</th>
+                        <th className={cx('widgetLgTh')}>Số tiền</th>
+                        <th className={cx('widgetLgTh')}>Trạng thái</th>
                     </tr>
-                    <tr className={cx('widgetLgTr')}>
-                        <td className={cx('widgetLgUser')}>
-                            <img
-                                src="https://images.pexels.com/photos/4172933/pexels-photo-4172933.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                alt=""
-                                className={cx('widgetLgImg')}
-                            />
-                            <span className={cx('widgetLgName')}>Susan Carol</span>
-                        </td>
-                        <td className={cx('widgetLgDate')}>2 Jun 2021</td>
-                        <td className={cx('widgetLgAmount')}>$122.00</td>
-                        <td className={cx('widgetLgStatus')}>
-                            <Button type="Approved" />
-                        </td>
-                    </tr>
-                    <tr className={cx('widgetLgTr')}>
-                        <td className={cx('widgetLgUser')}>
-                            <img
-                                src="https://images.pexels.com/photos/4172933/pexels-photo-4172933.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                alt=""
-                                className={cx('widgetLgImg')}
-                            />
-                            <span className={cx('widgetLgName')}>Susan Carol</span>
-                        </td>
-                        <td className={cx('widgetLgDate')}>2 Jun 2021</td>
-                        <td className={cx('widgetLgAmount')}>$122.00</td>
-                        <td className={cx('widgetLgStatus')}>
-                            <Button type="Declined" />
-                        </td>
-                    </tr>
-                    <tr className={cx('widgetLgTr')}>
-                        <td className={cx('widgetLgUser')}>
-                            <img
-                                src="https://images.pexels.com/photos/4172933/pexels-photo-4172933.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                alt=""
-                                className={cx('widgetLgImg')}
-                            />
-                            <span className={cx('widgetLgName')}>Susan Carol</span>
-                        </td>
-                        <td className={cx('widgetLgDate')}>2 Jun 2021</td>
-                        <td className={cx('widgetLgAmount')}>$122.00</td>
-                        <td className={cx('widgetLgStatus')}>
-                            <Button type="Pending" />
-                        </td>
-                    </tr>
-                    <tr className={cx('widgetLgTr')}>
-                        <td className={cx('widgetLgUser')}>
-                            <img
-                                src="https://images.pexels.com/photos/4172933/pexels-photo-4172933.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-                                alt=""
-                                className={cx('widgetLgImg')}
-                            />
-                            <span className={cx('widgetLgName')}>Susan Carol</span>
-                        </td>
-                        <td className={cx('widgetLgDate')}>2 Jun 2021</td>
-                        <td className={cx('widgetLgAmount')}>$122.00</td>
-                        <td className={cx('widgetLgStatus')}>
-                            <Button type="Approved" />
-                        </td>
-                    </tr>
+                    {dummyData.map((transaction, index) => {
+                        return (
+                            <tr key={index} className={cx('widgetLgTr')}>
+                                <Link to={'/user/' + transaction.user.id}>
+                                    <td className={cx('widgetLgUser')}>
+                                        <img src={transaction.user.avatar} alt="" className={cx('widgetLgImg')} />
+                                        <span className={cx('widgetLgName')}>{transaction.user.userName}</span>
+                                    </td>
+                                </Link>
+                                <td className={cx('widgetLgDate')}>{transaction.date}</td>
+                                <td className={cx('widgetLgAmount')}>
+                                    {transaction.total} {transaction.currency}
+                                </td>
+                                <td className={cx('widgetLgStatus')}>
+                                    <Button type={transaction.status} />
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
