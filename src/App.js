@@ -11,6 +11,7 @@ import Course from '~/pages/Course';
 import NewCourse from '~/pages/NewCourse';
 import TransactionList from '~/pages/TransactionList';
 import Transaction from '~/pages/Transaction';
+import Chart from '~/pages/Chart';
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/courses" element={<CourseList />} />
                     <Route path="/transactions" element={<TransactionList />} />
                     <Route path="/transaction/:transactionId" element={<Transaction />} />
+                    <Route path="/chart" element={<Chart />} />
                 </Routes>
             </div>
         </Router>

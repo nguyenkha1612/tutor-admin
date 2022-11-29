@@ -1,0 +1,16 @@
+.chartWrapper {
+    flex: 1;
+}
+
+.chart {
+    & ~ .chart {
+        margin-top: 20px;
+    }
+}
+
+.select-year {
+    margin-left: 20px;
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+}

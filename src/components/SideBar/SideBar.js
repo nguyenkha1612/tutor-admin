@@ -9,7 +9,6 @@ import {
     Report,
     School,
     Timeline,
-    TrendingUp,
     WorkOutline,
 } from '@mui/icons-material';
 import classNames from 'classnames/bind';
@@ -31,23 +30,17 @@ function SideBar() {
                     title: 'Trang chủ',
                     icon: <Home className={cx('sidebarIcon')} />,
                 },
-                {
-                    link: '/analytics',
-                    active: false,
-                    title: 'Analytics',
-                    icon: <Timeline className={cx('sidebarIcon')} />,
-                },
-                {
-                    link: '/sales',
-                    active: false,
-                    title: 'Sales',
-                    icon: <TrendingUp className={cx('sidebarIcon')} />,
-                },
             ],
         },
         {
             title: 'Quick Menu',
             list: [
+                {
+                    link: '/chart',
+                    active: false,
+                    title: 'Biểu đồ',
+                    icon: <Timeline className={cx('sidebarIcon')} />,
+                },
                 {
                     link: '/users',
                     active: false,
