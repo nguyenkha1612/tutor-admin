@@ -10,6 +10,7 @@ import CourseList from '~/pages/CourseList';
 import Course from '~/pages/Course';
 import NewCourse from '~/pages/NewCourse';
 import TransactionList from '~/pages/TransactionList';
+import Transaction from '~/pages/Transaction';
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/newCourse" element={<NewCourse />} />
                     <Route path="/courses" element={<CourseList />} />
                     <Route path="/transactions" element={<TransactionList />} />
+                    <Route path="/transaction/:transactionId" element={<Transaction />} />
                 </Routes>
             </div>
         </Router>
