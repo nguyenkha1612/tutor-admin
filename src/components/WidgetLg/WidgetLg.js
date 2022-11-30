@@ -75,8 +75,8 @@ function WidgetLg() {
                     {dummyData.map((transaction, index) => {
                         return (
                             <tr key={index} className={cx('widgetLgTr')}>
-                                <td className={cx('widgetLgUser')}>
-                                    <Link to={'/user/' + transaction.user.id}>
+                                <td>
+                                    <Link to={'/user/' + transaction.user.id} className={cx('widgetLgUser')}>
                                         <img src={transaction.user.avatar} alt="" className={cx('widgetLgImg')} />
                                         <span className={cx('widgetLgName')}>{transaction.user.userName}</span>
                                     </Link>

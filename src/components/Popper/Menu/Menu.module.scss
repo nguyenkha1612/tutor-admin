@@ -1,0 +1,58 @@
+.menu-list {
+    width: 224px;
+
+    .menu-item {
+        margin-left: 0;
+        padding: 11px 16px;
+        width: 100%;
+        font-weight: 500;
+        justify-content: flex-start;
+        border-radius: 0;
+        font-family: ProximaNova-Regular, sans-serif;
+
+        &.separate {
+            border-top: 1px solid rgba(22, 24, 35, 0.12);
+        }
+    }
+}
+
+.menu-popper {
+    padding-bottom: 8px;
+}
+
+.menu-body {
+    overflow-y: auto;
+}
+
+// Header
+.header {
+    position: relative;
+    height: 50px;
+    margin-top: -8px;
+    flex-shrink: 0; // ko bi chen ep
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .icon {
+        position: absolute;
+        top: 50%;
+        left: 20%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+    }
+
+    .header-title {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 16px;
+    }
+}
