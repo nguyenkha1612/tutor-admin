@@ -47,8 +47,8 @@ function WidgetSm() {
             <ul className={cx('widgetSmList')}>
                 {dummyData.map((user, index) => {
                     return (
-                        <Link to={'/user/' + user.id}>
-                            <li key={index} className={cx('widgetSmListItem')}>
+                        <Link key={index} to={'/user/' + user.id}>
+                            <li className={cx('widgetSmListItem')}>
                                 <div className={cx('widgetSmListItem__left')}>
                                     <img src={user.avatar} alt="" className={cx('widgetSmImg')} />
                                     <div className={cx('widgetSmUser')}>

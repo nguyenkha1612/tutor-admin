@@ -75,12 +75,12 @@ function WidgetLg() {
                     {dummyData.map((transaction, index) => {
                         return (
                             <tr key={index} className={cx('widgetLgTr')}>
-                                <Link to={'/user/' + transaction.user.id}>
-                                    <td className={cx('widgetLgUser')}>
+                                <td className={cx('widgetLgUser')}>
+                                    <Link to={'/user/' + transaction.user.id}>
                                         <img src={transaction.user.avatar} alt="" className={cx('widgetLgImg')} />
                                         <span className={cx('widgetLgName')}>{transaction.user.userName}</span>
-                                    </td>
-                                </Link>
+                                    </Link>
+                                </td>
                                 <td className={cx('widgetLgDate')}>{transaction.date}</td>
                                 <td className={cx('widgetLgAmount')}>
                                     {transaction.total} {transaction.currency}

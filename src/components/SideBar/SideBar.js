@@ -125,8 +125,6 @@ function SideBar() {
         setDummyData(newDummyData);
     };
 
-    console.log('render');
-
     return (
         <div className={cx('sidebar')}>
             <div className={cx('sidebarWrapper')}>
