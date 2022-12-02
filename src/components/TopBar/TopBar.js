@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { NotificationsNone as NotificationsNoneIcon, Language, Settings } from '@mui/icons-material';
 import { Logout } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 import Menu from '~/components/Popper/Menu';
 import Notification from '~/components/Popper/Notification';
 import styles from './TopBar.module.scss';
-import { Link } from 'react-router-dom';
+import DefaultImage from '~/assets/images/default-user.png';
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +30,12 @@ const NOTIFICATION_ITEMS = [
 ];
 
 function TopBar() {
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.isLogin) setIsLogin(true);
+    }, []);
+
     const handleMenuCHange = (menuItem) => {
         switch (menuItem.type) {
             case 'language':
@@ -53,15 +60,23 @@ function TopBar() {
                             <span className={cx('topIconBadge')}>2</span>
                         </div>
                     </Notification>
-                    <div className={cx('topbarIconContainer')}>
+                    {/* <div className={cx('topbarIconContainer')}>
                         <Settings />
-                    </div>
+                    </div> */}
                     <Menu items={MENU_ITEMS} onChange={handleMenuCHange}>
-                        <img
-                            src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-                            alt="avatar"
-                            className={cx('topAvatar')}
-                        />
+                        {isLogin ? (
+                            <Link to={'/user/1'}>
+                                <img
+                                    src={'https://www.w3schools.com/css/img_lights.jpg'}
+                                    alt="avatar"
+                                    className={cx('topAvatar')}
+                                />
+                            </Link>
+                        ) : (
+                            <Link to={'/login'}>
+                                <img src={DefaultImage} alt="avatar" className={cx('topAvatar')} />
+                            </Link>
+                        )}
                     </Menu>
                 </div>
             </div>

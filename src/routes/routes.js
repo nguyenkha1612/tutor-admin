@@ -1,4 +1,5 @@
 import config from '~/config';
+import { HeadlessLayout } from '~/layouts';
 import Home from '~/pages/Home';
 import User from '~/pages/User';
 import NewUser from '~/pages/NewUser';
@@ -9,10 +10,15 @@ import NewCourse from '~/pages/NewCourse';
 import TransactionList from '~/pages/TransactionList';
 import Transaction from '~/pages/Transaction';
 import Chart from '~/pages/Chart';
+import Login from '~/pages/Login';
 
 export const publicRoutes = [
     {
         path: config.routes.home,
+        component: Home,
+    },
+    {
+        path: config.routes.home2,
         component: Home,
     },
     {
@@ -50,5 +56,10 @@ export const publicRoutes = [
     {
         path: config.routes.chart,
         component: Chart,
+    },
+    {
+        path: config.routes.login,
+        component: Login,
+        layout: HeadlessLayout,
     },
 ];

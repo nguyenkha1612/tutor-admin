@@ -1,8 +1,23 @@
 import instance from '~/utils/httpRequest';
 
-export const getRevenue = async () => {
+export const getRevenue = async (user = '', from = '', to = '') => {
     try {
-        const res = await instance.get('/v1/payment/revenue');
+        const res = await instance.get('/v1/payment/revenue', {
+            params: {
+                user,
+                from,
+                to,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getUserList = async () => {
+    try {
+        const res = await instance.get('/v1/auths/user');
         return res;
     } catch (error) {
         console.log(error);

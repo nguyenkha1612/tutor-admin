@@ -1,5 +1,6 @@
 const routes = {
     home: '/',
+    home2: '/home',
     user: '/user/:userId',
     newUser: '/newUser',
     userList: '/users',
@@ -9,6 +10,7 @@ const routes = {
     transaction: '/transaction/:transactionId',
     transactionList: '/transactions',
     chart: '/chart',
+    login: '/login',
 };
 
 export default routes;
