@@ -23,13 +23,13 @@ function Menu({ children, items = [], onChange = defaultFn, hideOnClick = false 
                 <MenuItem
                     key={index}
                     data={item}
-                    onClick={() => {
-                        if (isParent) {
-                            setHistory((prev) => [...prev, item.children]);
-                        } else {
-                            onChange(item);
-                        }
-                    }}
+                    // onClick={() => {
+                    //     if (isParent) {
+                    //         setHistory((prev) => [...prev, item.children]);
+                    //     } else {
+                    //         onChange(item);
+                    //     }
+                    // }}
                 />
             );
         });

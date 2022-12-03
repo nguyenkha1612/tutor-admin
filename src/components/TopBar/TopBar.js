@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames/bind';
 import { NotificationsNone as NotificationsNoneIcon, Language, Settings } from '@mui/icons-material';
 import { Logout } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { useOnClickOutside } from '~/components/Hooks/useOnClickOutside';
+import { logout } from '~/redux/auth/actions';
+import config from '~/config';
 
 import Menu from '~/components/Popper/Menu';
 import Notification from '~/components/Popper/Notification';
@@ -10,11 +14,6 @@ import styles from './TopBar.module.scss';
 import DefaultImage from '~/assets/images/default-user.png';
 
 const cx = classNames.bind(styles);
-
-const MENU_ITEMS = [
-    // { icon: <></>, title: 'Feedback and help', to: '/feedback' },
-    { icon: <Logout />, title: 'Đăng xuất' },
-];
 
 const NOTIFICATION_ITEMS = [
     {
@@ -35,6 +34,16 @@ function TopBar() {
     useEffect(() => {
         if (localStorage.isLogin) setIsLogin(true);
     }, []);
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
+    const MENU_ITEMS = [
+        // { icon: <></>, title: 'Feedback and help', to: '/feedback' },
+        { icon: <Logout />, title: 'Đăng xuất', onClick: handleLogout },
+    ];
 
     const handleMenuCHange = (menuItem) => {
         switch (menuItem.type) {
@@ -43,6 +52,14 @@ function TopBar() {
             default:
                 console.log(menuItem);
         }
+    };
+    const auth = useSelector((state) => state.auth);
+    const refOverClickOutSide = useRef();
+    const [isShow, setIsShow] = useState(false);
+    useOnClickOutside(refOverClickOutSide, () => setIsShow(!isShow));
+    const toggleDropdown = () => {
+        // setIsShow(!isShow);
+        // console.log(isShow);
     };
 
     return (
@@ -60,23 +77,16 @@ function TopBar() {
                             <span className={cx('topIconBadge')}>2</span>
                         </div>
                     </Notification>
-                    {/* <div className={cx('topbarIconContainer')}>
-                        <Settings />
-                    </div> */}
+
                     <Menu items={MENU_ITEMS} onChange={handleMenuCHange}>
-                        {isLogin ? (
-                            <Link to={'/user/1'}>
-                                <img
-                                    src={'https://www.w3schools.com/css/img_lights.jpg'}
-                                    alt="avatar"
-                                    className={cx('topAvatar')}
-                                />
-                            </Link>
-                        ) : (
-                            <Link to={'/login'}>
-                                <img src={DefaultImage} alt="avatar" className={cx('topAvatar')} />
-                            </Link>
-                        )}
+                        {auth.user ? (
+                            <div className={cx('user')}>
+                                <span className={cx('user-name')}>{auth.user.name} </span>
+                                <div className={cx('avatar')}>
+                                    <img src={DefaultImage} alt="" />
+                                </div>
+                            </div>
+                        ) : null}
                     </Menu>
                 </div>
             </div>

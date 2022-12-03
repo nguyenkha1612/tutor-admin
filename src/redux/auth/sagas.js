@@ -26,11 +26,15 @@ function* loginSaga(action) {
         console.log(response);
         if (response.status === 1) {
             localStorage.setItem('token', response.data);
-
             const user = yield call(getUserService);
-            yield put({ type: LOGIN_SUCCESS, payload: { user: user.data } });
-
-            RootNavigate.getNavigate()('/');
+            if (user.data) {
+                const roles = user.data.roles?.map((item, i) => item.id);
+                if (roles.includes('ADMIN')) {
+                    yield put({ type: LOGIN_SUCCESS, payload: { user: user.data } });
+                    return;
+                }
+            }
+            yield put({ type: LOGIN_FAIL, payload: { error: 'Tài khoản không được phép đăng nhập' } });
         } else {
             yield put({ type: LOGIN_FAIL, payload: { error: response.message } });
         }
