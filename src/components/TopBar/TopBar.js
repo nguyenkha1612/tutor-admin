@@ -1,17 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Logout, NotificationsNone as NotificationsNoneIcon } from '@mui/icons-material';
 import classNames from 'classnames/bind';
-import { NotificationsNone as NotificationsNoneIcon, Language, Settings } from '@mui/icons-material';
-import { Logout } from '@mui/icons-material';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useOnClickOutside } from '~/components/Hooks/useOnClickOutside';
 import { logout } from '~/redux/auth/actions';
-import config from '~/config';
 
+import DefaultImage from '~/assets/images/default-user.png';
 import Menu from '~/components/Popper/Menu';
 import Notification from '~/components/Popper/Notification';
 import styles from './TopBar.module.scss';
-import DefaultImage from '~/assets/images/default-user.png';
 
 const cx = classNames.bind(styles);
 
@@ -29,15 +27,11 @@ const NOTIFICATION_ITEMS = [
 ];
 
 function TopBar() {
-    const [isLogin, setIsLogin] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.isLogin) setIsLogin(true);
-    }, []);
     const dispatch = useDispatch();
 
     const handleLogout = () => {
         dispatch(logout());
+        // window.location.href = '/';
     };
 
     const MENU_ITEMS = [
@@ -45,7 +39,7 @@ function TopBar() {
         { icon: <Logout />, title: 'Đăng xuất', onClick: handleLogout },
     ];
 
-    const handleMenuCHange = (menuItem) => {
+    const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
             case 'language':
                 break;
@@ -77,16 +71,22 @@ function TopBar() {
                             <span className={cx('topIconBadge')}>2</span>
                         </div>
                     </Notification>
-
-                    <Menu items={MENU_ITEMS} onChange={handleMenuCHange}>
+                    <Menu items={MENU_ITEMS} onChange={handleMenuChange}>
                         {auth.user ? (
-                            <div className={cx('user')}>
-                                <span className={cx('user-name')}>{auth.user.name} </span>
-                                <div className={cx('avatar')}>
-                                    <img src={DefaultImage} alt="" />
+                            <Link to={'/user/1'}>
+                                <div className={cx('user')}>
+                                    <span className={cx('user-name')}>{auth.user.name} </span>
+                                    <img src={DefaultImage} alt="" className={cx('topAvatar')} />
                                 </div>
-                            </div>
-                        ) : null}
+                            </Link>
+                        ) : (
+                            <Link to={'/login'}>
+                                <img src={DefaultImage} alt="avatar" className={cx('topAvatar')} />
+                            </Link>
+                        )}
+                        {/* <div className={cx('topbarIconContainer')}>
+                        <Settings />
+                    </div> */}
                     </Menu>
                 </div>
             </div>

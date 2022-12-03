@@ -12,7 +12,7 @@ function MenuItem({ data }) {
     });
     return (
         <div className={cx('wrapper')}>
-            <Button text leftIcon={data.icon} className={classes} onClick={data.onClick}>
+            <Button text leftIcon={data.icon} to={data.to} className={classes} onClick={data.onClick}>
                 {data.title}
             </Button>
         </div>

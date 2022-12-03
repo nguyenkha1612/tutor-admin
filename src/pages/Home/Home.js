@@ -1,11 +1,10 @@
 import className from 'classnames/bind';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Chart from '~/components/Chart';
 import FeaturedInfo from '~/components/FeatureInfo';
 import WidgetSm from '~/components/WidgetSm';
 import WidgetLg from '~/components/WidgetLg';
-import { userData } from '~/dummyData';
 
 import * as services from '~/services/services';
 
@@ -14,15 +13,46 @@ import styles from './Home.module.scss';
 const cx = className.bind(styles);
 
 export default function Home() {
+    const [revenueYearly, setRevenueYearly] = useState([]);
+    const [featureData, setFeatureData] = useState([]);
+    let currencyRate = 23000;
+    let currentDate = new Date();
+    let revenueThisMonth;
+    let revenueLastMonth;
+    let quantityRate;
+
     useEffect(() => {
         const fetchApi = async () => {
-            // const result = await services.loginService('nguyenhuukha1612@gmail.com', '123');
-            localStorage.setItem(
-                'token',
-                'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzA3NTExNDksInVzZXIiOnsicGFzc3dvcmQiOiIkMmEkMTAkcEtlRG9EVWxnSkF2b0psQm9jZ0RUdS5UajRCenVxbURzMEZQSUpnRHY3RVlEd01McUFpOWkiLCJ1c2VySWQiOjQxLCJhdXRob3JpdGllcyI6WyJSRUFEIiwiU1RVREVOVCJdLCJ1c2VybmFtZSI6Im5ndXllbmh1dWtoYTE2MTJAZ21haWwuY29tIn19._W-7B38C7el4zbFisUtjlmlJtu3OLF98bZ1MjMK2u-M',
-            );
-            const result = await services.getUserList();
-            console.log(result);
+            // const info = await services.getUserInfo();
+            // console.log('info', info.data.data);
+
+            const revenueRes = await services.getRevenueYearly(currentDate.getFullYear());
+            let revenue = [];
+            revenueRes.data.forEach((data) => {
+                revenue.push({
+                    name: 'Tháng ' + data.month,
+                    'Doanh thu': Number(data.amount) * currencyRate,
+                });
+
+                let lastMonth = new Date(currentDate.getMonth() - 1).getMonth();
+
+                if (data.month - 1 === currentDate.getMonth) revenueThisMonth = data.amount;
+
+                if (data.month - 1 === lastMonth) revenueLastMonth = data.amount;
+            });
+            setRevenueYearly(revenue);
+            console.log(revenueThisMonth, revenueLastMonth);
+            quantityRate = (revenueThisMonth / revenueLastMonth - 1) * 100;
+            let feature = [];
+            feature.push({
+                title: 'Doanh thu',
+                currentQuantity: revenueThisMonth,
+                unit: 'VNĐ',
+                quantityRate: quantityRate,
+                increase: false,
+                featuredSub: 'So với tháng trước',
+            });
+            console.log(feature);
         };
 
         fetchApi();
@@ -30,8 +60,8 @@ export default function Home() {
 
     return (
         <div className={cx('homeWrapper')}>
-            <FeaturedInfo />
-            <Chart data={userData} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
+            <FeaturedInfo data={''} />
+            <Chart data={revenueYearly} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
             <div className={cx('homeWidgets')}>
                 <WidgetSm />
                 <WidgetLg />

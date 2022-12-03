@@ -33,7 +33,7 @@ const dummyData = [
     },
 ];
 
-function FeatureInfo() {
+function FeatureInfo(data = []) {
     return (
         <div className={cx('featured')}>
             {dummyData.map((data, index) => {

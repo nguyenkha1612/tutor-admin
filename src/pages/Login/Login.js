@@ -1,12 +1,9 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import LoadingOverlay from 'react-loading-overlay-ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Button from '~/components/Button';
 import { login, reset } from '~/redux/auth/actions';
 import RootNavigator from '~/utils/navigate';
 import styles from './Login.module.scss';
@@ -28,9 +25,6 @@ function Login() {
     RootNavigator.setNavigate(navigate);
     useEffect(() => {
         dispatch(reset());
-        // if (auth.user) {
-        //     history.replace('/');
-        // }
     }, []);
 
     const handleLogin = () => {
@@ -110,7 +104,6 @@ function Login() {
                                         <i className="fas fa-phone"></i> Đăng nhập
                                     </button>
                                 </div>
-
                                 <div className={cx('hr-empty')}></div>
                             </form>
                         </div>

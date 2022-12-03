@@ -31,6 +31,8 @@ function* loginSaga(action) {
                 const roles = user.data.roles?.map((item, i) => item.id);
                 if (roles.includes('ADMIN')) {
                     yield put({ type: LOGIN_SUCCESS, payload: { user: user.data } });
+                    window.location.reload(false);
+                    RootNavigate.getNavigate()('/');
                     return;
                 }
             }

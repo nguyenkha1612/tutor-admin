@@ -15,6 +15,24 @@ import Login from '~/pages/Login';
 export const publicRoutes = [
     {
         path: config.routes.home,
+        component: Login,
+        layout: HeadlessLayout,
+    },
+    {
+        path: config.routes.home2,
+        component: Login,
+        layout: HeadlessLayout,
+    },
+    {
+        path: config.routes.login,
+        component: Login,
+        layout: HeadlessLayout,
+    },
+];
+
+export const privateRoutes = [
+    {
+        path: config.routes.home,
         component: Home,
     },
     {

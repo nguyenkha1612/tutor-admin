@@ -30,6 +30,7 @@ function authReducer(state = initialState, action) {
             return { ...state, loading: false, user: null, error: action.payload.error, message: null };
         case LOGOUT:
             localStorage.removeItem('token');
+            window.location.href = '/';
             return { ...state, loading: false, user: null };
         case SIGNUP_SUCCESS:
             return { ...state, loading: false, message: action.payload.message, error: null };
