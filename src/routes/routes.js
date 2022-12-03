@@ -62,4 +62,9 @@ export const publicRoutes = [
         component: Login,
         layout: HeadlessLayout,
     },
+    {
+        path: config.routes.logout,
+        component: Login,
+        layout: HeadlessLayout,
+    },
 ];

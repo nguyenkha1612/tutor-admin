@@ -11,6 +11,7 @@ const routes = {
     transactionList: '/transactions',
     chart: '/chart',
     login: '/login',
+    logout: '/logout',
 };
 
 export default routes;
