@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import className from 'classnames/bind';
 import {
     AttachMoney,
@@ -46,7 +46,7 @@ const courseData = {
     },
 };
 
-export default function Course() {
+export default memo(function Course() {
     const [data, setData] = useState(courseData);
 
     return (
@@ -154,4 +154,4 @@ export default function Course() {
             </div>
         </div>
     );
-}
+});

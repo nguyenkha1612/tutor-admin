@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DeleteOutline } from '@mui/icons-material';
 import DataGrid from '~/components/DataGrid';
@@ -90,4 +90,4 @@ function CourseList() {
     );
 }
 
-export default CourseList;
+export default memo(CourseList);

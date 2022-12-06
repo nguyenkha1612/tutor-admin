@@ -1,66 +1,18 @@
-import React from 'react';
 import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 
 import styles from './WidgetLg.module.scss';
-import { Link } from 'react-router-dom';
+import { handleDate } from '~/utils/commonFunc';
+import { memo } from 'react';
 
 const cx = classNames.bind(styles);
 
-const dummyData = [
-    {
-        user: {
-            id: 1,
-            userName: 'Arianmu Grandu',
-            name: 'Arianmu Grandu',
-            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
-        },
-        date: '2022-20-11',
-        total: '50.000',
-        currency: 'VNĐ',
-        status: 'Approved',
-    },
-    {
-        user: {
-            id: 2,
-            userName: 'Arianmu Grandu',
-            name: 'Arianmu Grandu',
-            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
-        },
-        date: '2022-20-11',
-        total: '60.000',
-        currency: 'VNĐ',
-        status: 'Declined',
-    },
-    {
-        user: {
-            id: 3,
-            userName: 'Arianmu Grandu',
-            name: 'Arianmu Grandu',
-            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
-        },
-        date: '2022-20-11',
-        total: '24.000',
-        currency: 'VNĐ',
-        status: 'Pending',
-    },
-    {
-        user: {
-            id: 4,
-            userName: 'Arianmu Grandu',
-            name: 'Arianmu Grandu',
-            avatar: 'https://www.w3schools.com/w3images/avatar6.png',
-        },
-        date: '2022-20-11',
-        total: '70.000',
-        currency: 'VNĐ',
-        status: 'Approved',
-    },
-];
-
-function WidgetLg() {
+function WidgetLg({ data }) {
     const Button = ({ type }) => {
+        type = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
         return <button className={cx('widgetLgButton', type)}>{type}</button>;
     };
+
     return (
         <div className={cx('widgetLg')}>
             <h3 className={cx('widgetLgTitle')}>Giao dịch gần nhất</h3>
@@ -72,18 +24,22 @@ function WidgetLg() {
                         <th className={cx('widgetLgTh')}>Số tiền</th>
                         <th className={cx('widgetLgTh')}>Trạng thái</th>
                     </tr>
-                    {dummyData.map((transaction, index) => {
+                    {data.map((transaction) => {
                         return (
-                            <tr key={index} className={cx('widgetLgTr')}>
+                            <tr key={transaction.id} className={cx('widgetLgTr')}>
                                 <td>
-                                    <Link to={'/user/' + transaction.user.id} className={cx('widgetLgUser')}>
-                                        <img src={transaction.user.avatar} alt="" className={cx('widgetLgImg')} />
-                                        <span className={cx('widgetLgName')}>{transaction.user.userName}</span>
+                                    <Link to={'/user/' + transaction.userId} className={cx('widgetLgUser')}>
+                                        <img
+                                            src={transaction.userInfo.urlAvt}
+                                            alt="avatar"
+                                            className={cx('widgetLgImg')}
+                                        />
+                                        <span className={cx('widgetLgName')}>{transaction.userInfo.name}</span>
                                     </Link>
                                 </td>
-                                <td className={cx('widgetLgDate')}>{transaction.date}</td>
+                                <td className={cx('widgetLgDate')}>{handleDate(new Date(transaction.createdAt))}</td>
                                 <td className={cx('widgetLgAmount')}>
-                                    {transaction.total} {transaction.currency}
+                                    {transaction.amount} {transaction.currencyCode}
                                 </td>
                                 <td className={cx('widgetLgStatus')}>
                                     <Button type={transaction.status} />
@@ -97,4 +53,4 @@ function WidgetLg() {
     );
 }
 
-export default WidgetLg;
+export default memo(WidgetLg);

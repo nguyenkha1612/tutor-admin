@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames/bind';
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styles from './Chart.module.scss';
@@ -21,4 +21,4 @@ function Chart({ title, data, dataKey, grid }) {
     );
 }
 
-export default Chart;
+export default memo(Chart);

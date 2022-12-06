@@ -1,5 +1,5 @@
 import className from 'classnames/bind';
-import { useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 
 import ChartComponent from '~/components/Chart';
 import { userData } from '~/dummyData';
@@ -116,7 +116,7 @@ const options = [
     { label: 2020, value: 2020 },
 ];
 
-export default function Chart() {
+export default memo(function Chart() {
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
     const handleChangeYear = (e) => {
@@ -160,4 +160,4 @@ export default function Chart() {
             </div>
         </div>
     );
-}
+});

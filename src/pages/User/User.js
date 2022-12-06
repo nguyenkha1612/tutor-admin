@@ -11,6 +11,7 @@ import {
 import WidgetLg from '~/components/WidgetLg';
 
 import styles from './User.module.scss';
+import { memo } from 'react';
 
 const cx = className.bind(styles);
 
@@ -27,7 +28,7 @@ const userData = {
     transaction: {},
 };
 
-export default function User() {
+export default memo(function User() {
     return (
         <div className={cx('user')}>
             <div className={cx('userTitleContainer')}>
@@ -113,4 +114,4 @@ export default function User() {
             </div>
         </div>
     );
-}
+});

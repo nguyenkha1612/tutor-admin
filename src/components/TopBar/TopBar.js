@@ -1,6 +1,6 @@
 import { Logout, NotificationsNone as NotificationsNoneIcon } from '@mui/icons-material';
 import classNames from 'classnames/bind';
-import { useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useOnClickOutside } from '~/components/Hooks/useOnClickOutside';
@@ -94,4 +94,4 @@ function TopBar() {
     );
 }
 
-export default TopBar;
+export default memo(TopBar);
