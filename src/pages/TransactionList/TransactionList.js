@@ -1,82 +1,37 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DeleteOutline } from '@mui/icons-material';
-import DataGrid from '~/components/DataGrid';
 import className from 'classnames/bind';
+import { memo, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import DataGrid from '~/components/DataGrid';
+import LoadingOverlay from 'react-loading-overlay-ts';
 
+import * as services from '~/services/services';
+import { handleDate } from '~/utils/commonFunc';
 import styles from './TransactionList.module.scss';
 
 const cx = className.bind(styles);
 
-const courseRows = [
-    {
-        id: 1,
-        total: '50.000 VNĐ',
-        createDate: '2022-11-19 15:42:14',
-        paymentMethod: {
-            id: 1,
-            name: 'Paypal',
-        },
-        user: {
-            id: 1,
-            avatar: 'https://i.pinimg.com/originals/a2/2b/fc/a22bfc39b99bacf8d3641d991093ff86.jpg',
-            name: 'Arianmu Grandu',
-            role: 'Học sinh',
-            userName: 'arianmugrandidi',
-            birthday: '10/12/1999',
-            phone: '+84 323 568 452',
-            email: 'arianmu@gmail.com',
-            address: 'New York | USA',
-        },
-    },
-    {
-        id: 2,
-        total: '500.000 VNĐ',
-        createDate: '2022-11-19 15:42:14',
-        paymentMethod: {
-            id: 1,
-            name: 'Paypal',
-        },
-        user: {
-            id: 1,
-            avatar: 'https://i.pinimg.com/originals/a2/2b/fc/a22bfc39b99bacf8d3641d991093ff86.jpg',
-            name: 'Arianmu Grandu',
-            role: 'Học sinh',
-            userName: 'arianmugrandidi',
-            birthday: '10/12/1999',
-            phone: '+84 323 568 452',
-            email: 'arianmu@gmail.com',
-            address: 'New York | USA',
-        },
-    },
-    {
-        id: 3,
-        total: '24.000 VNĐ',
-        createDate: '2022-11-19 15:42:14',
-        paymentMethod: {
-            id: 1,
-            name: 'Paypal',
-        },
-        user: {
-            id: 1,
-            avatar: 'https://i.pinimg.com/originals/a2/2b/fc/a22bfc39b99bacf8d3641d991093ff86.jpg',
-            name: 'Arianmu Grandu',
-            role: 'Học sinh',
-            userName: 'arianmugrandidi',
-            birthday: '10/12/1999',
-            phone: '+84 323 568 452',
-            email: 'arianmu@gmail.com',
-            address: 'New York | USA',
-        },
-    },
-];
-
 function TransactionList() {
-    const [data, setData] = useState(courseRows);
+    const [data, setData] = useState([]);
 
-    const handleDelete = (id) => {
-        setData(data.filter((item) => item.id !== id));
-    };
+    useEffect(() => {
+        const fetchApi = async () => {
+            const res = await services.getTransactionList();
+            const transactionList = res.data;
+            for (let i = 0; i < transactionList.length; i++) {
+                let userInfo = await services.getUserById(transactionList[i].userId);
+                if (userInfo != null)
+                    transactionList[i] = {
+                        ...transactionList[i],
+                        userInfo: userInfo.data,
+                    };
+            }
+
+            setData(transactionList);
+            console.log(transactionList);
+        };
+
+        fetchApi();
+    }, []);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5 },
@@ -87,24 +42,34 @@ function TransactionList() {
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
-                        <img className={cx('userListImg')} src={params.row.user.avatar} alt="" />
-                        {params.row.user.userName}
+                        <img className={cx('userListImg')} src={params.row.userInfo.urlAvt} alt="" />
+                        {params.row.userInfo.email}
                     </div>
                 );
             },
         },
-        { field: 'total', headerName: 'Số tiền', flex: 2 },
         {
-            field: 'createDate',
+            field: 'amount',
+            headerName: 'Số tiền',
+            flex: 2,
+            renderCell: (params) => {
+                return <>{params.row.amount + ' ' + params.row.currencyCode}</>;
+            },
+        },
+        {
+            field: 'createdAt',
             headerName: 'Thời gian giao dịch',
             flex: 1.5,
+            renderCell: (params) => {
+                return <>{handleDate(new Date(params.row.createdAt))}</>;
+            },
         },
         {
             field: 'paymentMethod',
             headerName: 'Phương thức thanh toán',
             flex: 1,
             renderCell: (params) => {
-                return <>{params.row.paymentMethod.name}</>;
+                return <>{params.row.method}</>;
             },
         },
         {
@@ -117,10 +82,6 @@ function TransactionList() {
                         <Link to={'/transaction/' + params.row.id}>
                             <button className={cx('dataGridEditBtn')}>Edit</button>
                         </Link>
-                        <DeleteOutline
-                            className={cx('dataGridDeleteBtn')}
-                            onClick={() => handleDelete(params.row.id)}
-                        />
                     </>
                 );
             },
@@ -128,10 +89,29 @@ function TransactionList() {
     ];
 
     return (
-        <div className={cx('transactionList')}>
+        <LoadingOverlay
+            active={data.length === 0}
+            spinner
+            text="Loading..."
+            className={cx('transactionList')}
+            styles={{
+                overlay: (base) => ({
+                    ...base,
+                    background: 'white',
+                    color: 'black',
+                }),
+                spinner: (base) => ({
+                    ...base,
+                    width: '65px',
+                    '& svg circle': {
+                        stroke: 'black',
+                    },
+                }),
+            }}
+        >
             <DataGrid rows={data} columns={columns} pageSize={8} disableSelectionOnClick checkboxSelection />
-        </div>
+        </LoadingOverlay>
     );
 }
 
-export default TransactionList;
+export default memo(TransactionList);

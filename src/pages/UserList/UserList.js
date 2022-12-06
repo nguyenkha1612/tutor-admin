@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DeleteOutline } from '@mui/icons-material';
 import className from 'classnames/bind';
@@ -91,7 +91,7 @@ const userRows = [
     },
 ];
 
-export default function UserList() {
+export default memo(function UserList() {
     const [data, setData] = useState(userRows);
 
     const handleDelete = (id) => {
@@ -149,4 +149,4 @@ export default function UserList() {
             <DataGrid rows={data} disableSelectionOnClick columns={columns} pageSize={8} checkboxSelection />
         </div>
     );
-}
+});

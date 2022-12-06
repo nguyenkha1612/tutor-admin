@@ -12,7 +12,7 @@ import {
 } from '@mui/icons-material';
 import className from 'classnames/bind';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import styles from './Transaction.module.scss';
 
 const cx = className.bind(styles);
@@ -46,7 +46,7 @@ const transactionData = {
     },
 };
 
-export default function Transaction() {
+export default memo(function Transaction() {
     // eslint-disable-next-line
     let [data, setData] = useState(transactionData);
 
@@ -138,4 +138,4 @@ export default function Transaction() {
             </div>
         </div>
     );
-}
+});

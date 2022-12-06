@@ -1,5 +1,6 @@
 import { DataGrid as DataGridTemplate } from '@mui/x-data-grid';
 import className from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './DataGrid.module.scss';
 
@@ -18,4 +19,4 @@ function DataGrid({ rows, columns, pageSize = 8, disableSelectionOnClick = false
     );
 }
 
-export default DataGrid;
+export default memo(DataGrid);
