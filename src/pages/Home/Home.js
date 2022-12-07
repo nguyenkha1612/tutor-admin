@@ -108,9 +108,11 @@ export default memo(function Home() {
             }
 
             setTransactionList(
-                transactionRes.data.sort(function (a, b) {
-                    return b.createdAt - a.createdAt;
-                }),
+                transactionRes.data
+                    .sort(function (a, b) {
+                        return b.createdAt - a.createdAt;
+                    })
+                    .slice(0, 5),
             );
 
             setFeatureData(feature);
@@ -120,9 +122,11 @@ export default memo(function Home() {
             const userListRes = await services.getUserList();
 
             setUserList(
-                userListRes.data.sort(function (a, b) {
-                    return b.createdAt - a.createdAt;
-                }),
+                userListRes.data
+                    .sort(function (a, b) {
+                        return b.createdAt - a.createdAt;
+                    })
+                    .slice(0, 5),
             );
         };
 

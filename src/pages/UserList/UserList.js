@@ -146,7 +146,7 @@ export default memo(function UserList() {
 
     return (
         <div className={cx('userList')}>
-            <DataGrid rows={data} disableSelectionOnClick columns={columns} pageSize={8} checkboxSelection />
+            <DataGrid rows={data} disableSelectionOnClick columns={columns} checkboxSelection />
         </div>
     );
 });

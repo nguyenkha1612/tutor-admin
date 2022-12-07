@@ -1,54 +1,28 @@
 import {
-    AttachMoney,
     CalendarToday,
-    LocationSearching,
-    Mail,
+    InfoOutlined,
+    LocationOnOutlined,
     MailOutline,
+    PaidOutlined,
     Payment,
     PermIdentity,
     PhoneAndroid,
-    Public,
-    Subject,
+    TypeSpecimenOutlined,
 } from '@mui/icons-material';
 import className from 'classnames/bind';
 
-import { memo, useState } from 'react';
+import { memo } from 'react';
+import { useLocation } from 'react-router-dom';
+import { handleDate, handleDateTime, upperCaseFirstLetter } from '~/utils/commonFunc';
 import styles from './Transaction.module.scss';
-
 const cx = className.bind(styles);
 
-const transactionData = {
-    id: 1,
-    total: '50.000 VNĐ',
-    createDate: '2022-11-19 15:42:14',
-    paymentMethod: {
-        id: 1,
-        name: 'Paypal',
-    },
-    user: {
-        id: 1,
-        avatar: 'https://i.pinimg.com/originals/a2/2b/fc/a22bfc39b99bacf8d3641d991093ff86.jpg',
-        name: 'Arianmu Grandu',
-        role: 'Học sinh',
-        userName: 'arianmugrandidi',
-        birthday: '10/12/1999',
-        phone: '+84 323 568 452',
-        email: 'arianmu@gmail.com',
-        address: 'New York | USA',
-    },
-    payeeEmail: 'sb-skr47t22139193@business.example.com',
-    payerInfo: {
-        id: '6CMCKDY4VSW6J',
-        email: 'sb-5nbx4722139618@personal.example.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        countryCode: 'US',
-    },
-};
-
 export default memo(function Transaction() {
-    // eslint-disable-next-line
-    let [data, setData] = useState(transactionData);
+    const location = useLocation();
+    const { data } = location.state;
+    const nullInfo = 'Trống';
+
+    console.log(data);
 
     return (
         <div className={cx('transaction')}>
@@ -58,33 +32,45 @@ export default memo(function Transaction() {
             <div className={cx('transactionContainer')}>
                 <div className={cx('transactionShow')}>
                     <div className={cx('transactionShowTop')}>
-                        <img src={data.user.avatar} alt="" className={cx('userShowImg')} />
+                        <img src={data.userInfo.urlAvt} alt="avatar" className={cx('userShowImg')} />
                         <div className={cx('userShowTopTitle')}>
-                            <span className={cx('userShowUserName')}>{data.user.name}</span>
-                            <span className={cx('userShowUserTitle')}>{data.user.role}</span>
+                            <span className={cx('userShowUserName')}>{data.userInfo.name}</span>
+                            <span className={cx('userShowUserTitle')}>
+                                {upperCaseFirstLetter(data.userInfo.roles[0].roleName)}
+                            </span>
                         </div>
                     </div>
                     <div className={cx('transactionShowBottom')}>
                         <span className={cx('transactionShowTitle')}>Chi tiết tài khoản</span>
                         <div className={cx('transactionShowInfo')}>
                             <PermIdentity className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.user.userName}</span>
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Tên tài khoản: {data.userInfo.userName || nullInfo}
+                            </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
                             <CalendarToday className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.user.birthday}</span>
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Ngày sinh: {handleDate(new Date(data.userInfo.birthday)) || nullInfo}
+                            </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
                             <PhoneAndroid className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.user.phone}</span>
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Số điện thoại: {data.userInfo.phone || nullInfo}
+                            </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
                             <MailOutline className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.user.email}</span>
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Email: {data.userInfo.email || nullInfo}
+                            </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
-                            <LocationSearching className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.user.address}</span>
+                            <LocationOnOutlined className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Địa chỉ: {data.userInfo.addresses[0] || nullInfo}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -93,45 +79,39 @@ export default memo(function Transaction() {
                         <span className={cx('transactionShowTitle')}>Chi tiết giao dịch</span>
                         <div className={cx('transactionShowInfo')}>
                             <PermIdentity className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.id}</span>
+                            <span className={cx('transactionShowInfoTitle')}>ID: {data.id}</span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
                             <CalendarToday className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.createDate}</span>
-                        </div>
-                        <div className={cx('transactionShowInfo')}>
-                            <AttachMoney className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.total}</span>
-                        </div>
-                        <div className={cx('transactionShowInfo')}>
-                            <Payment className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.paymentMethod.name}</span>
-                        </div>
-
-                        <span className={cx('transactionShowTitle')}>Tài khoản ngân hàng người gửi</span>
-                        <div className={cx('transactionShowInfo')}>
-                            <PermIdentity className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.payerInfo.id}</span>
-                        </div>
-                        <div className={cx('transactionShowInfo')}>
-                            <Subject className={cx('transactionShowIcon')} />
                             <span className={cx('transactionShowInfoTitle')}>
-                                {data.payerInfo.firstName} {data.payerInfo.lastName}
+                                Ngày giao dịch: {handleDateTime(new Date(data.createdAt) || nullInfo)}
                             </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
-                            <MailOutline className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.payerInfo.email}</span>
+                            <PaidOutlined className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Số tiền giao dịch: {data.amount} {data.currencyCode}
+                            </span>
                         </div>
                         <div className={cx('transactionShowInfo')}>
-                            <Public className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.payerInfo.countryCode}</span>
+                            <Payment className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>
+                                Phương thức giao dịch: {data.method || nullInfo}
+                            </span>
                         </div>
-
-                        <span className={cx('transactionShowTitle')}>Tài khoản ngân hàng người nhận</span>
                         <div className={cx('transactionShowInfo')}>
-                            <Mail className={cx('transactionShowIcon')} />
-                            <span className={cx('transactionShowInfoTitle')}>{data.payeeEmail}</span>
+                            <PermIdentity className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>
+                                ID {data.method}: {data.transactionId}
+                            </span>
+                        </div>
+                        <div className={cx('transactionShowInfo')}>
+                            <InfoOutlined className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>Trạng thái: {data.status}</span>
+                        </div>
+                        <div className={cx('transactionShowInfo')}>
+                            <TypeSpecimenOutlined className={cx('transactionShowIcon')} />
+                            <span className={cx('transactionShowInfoTitle')}>Loại giao dịch: {data.type}</span>
                         </div>
                     </div>
                 </div>

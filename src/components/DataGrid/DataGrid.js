@@ -1,13 +1,7 @@
 import { DataGrid as DataGridTemplate } from '@mui/x-data-grid';
-import className from 'classnames/bind';
 import { memo } from 'react';
 
-import styles from './DataGrid.module.scss';
-
-// eslint-disable-next-line no-unused-vars
-const cx = className.bind(styles);
-
-function DataGrid({ rows, columns, pageSize = 8, disableSelectionOnClick = false, checkboxSelection = false }) {
+function DataGrid({ rows, columns, pageSize = 12, disableSelectionOnClick = false, checkboxSelection = false }) {
     return (
         <DataGridTemplate
             rows={rows}

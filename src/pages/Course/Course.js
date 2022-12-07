@@ -12,7 +12,7 @@ import {
     Subject,
     Title,
 } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import WidgetLg from '~/components/WidgetLg';
 import styles from './Course.module.scss';
@@ -47,7 +47,10 @@ const courseData = {
 };
 
 export default memo(function Course() {
-    const [data, setData] = useState(courseData);
+    const location = useLocation();
+    const { data } = location.state;
+
+    console.log(data);
 
     return (
         <div className={cx('course')}>
@@ -85,32 +88,32 @@ export default memo(function Course() {
                         </div>
 
                         <span className={cx('courseShowTitle')}>Thông tin người dạy</span>
-                        <Link to={'/user/' + data.user.id} className={cx('userShowTop')}>
+                        {/* <Link to={'/user/' + data.user.id} className={cx('userShowTop')}>
                             <img src={data.user.avatar} alt="" className={cx('userShowImg')} />
                             <div className={cx('userShowTopTitle')}>
                                 <span className={cx('userShowUserName')}>{data.user.name}</span>
                                 <span className={cx('userShowUserTitle')}>{data.user.role}</span>
                             </div>
-                        </Link>
+                        </Link> */}
                         <div className={cx('courseShowInfo')}>
                             <PermIdentity className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.user.userName}</span>
+                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.userName}</span> */}
                         </div>
                         <div className={cx('courseShowInfo')}>
                             <CalendarToday className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.user.birthday}</span>
+                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.birthday}</span> */}
                         </div>
                         <div className={cx('courseShowInfo')}>
                             <PhoneAndroid className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.user.phone}</span>
+                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.phone}</span> */}
                         </div>
                         <div className={cx('courseShowInfo')}>
                             <MailOutline className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.user.email}</span>
+                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.email}</span> */}
                         </div>
                         <div className={cx('courseShowInfo')}>
                             <LocationSearching className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.user.address}</span>
+                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.address}</span> */}
                         </div>
                     </div>
                 </div>
@@ -149,9 +152,7 @@ export default memo(function Course() {
                     </form>
                 </div>
             </div>
-            <div className={cx('transactionsContainer')}>
-                <WidgetLg />
-            </div>
+            <div className={cx('transactionsContainer')}>{/* <WidgetLg /> */}</div>
         </div>
     );
 });

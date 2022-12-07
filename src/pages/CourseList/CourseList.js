@@ -1,49 +1,27 @@
-import { memo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DeleteOutline } from '@mui/icons-material';
+import { memo, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 import className from 'classnames/bind';
 import styles from './CourseList.module.scss';
-
+import * as services from '~/services/services';
+import LoadingOverlay from 'react-loading-overlay-ts';
 const cx = className.bind(styles);
 
-const courseRows = [
-    {
-        id: 1,
-        title: 'Tuyển gia sư dạy Vẽ',
-        description: 'Học viên nam 10 tuổi',
-        tuition: '5000000 VNĐ',
-        status: 'CREATE',
-    },
-    {
-        id: 2,
-        title: 'Tuyển gia sư dạy Lý',
-        description: 'Học viên lớp 7',
-        tuition: '2500000 VNĐ',
-        status: 'CREATE',
-    },
-    {
-        id: 3,
-        title: 'Tuyển gia sư dạy Toán',
-        description: 'Học viên lớp 10 đến 12',
-        tuition: '4000000 VNĐ',
-        status: 'CREATE',
-    },
-    {
-        id: 4,
-        title: 'Tuyển gia sư dạy thanh nhạc',
-        description: 'Học viên nữ 12 tuổi',
-        tuition: '10000000 VNĐ',
-        status: 'CREATE',
-    },
-];
-
 function CourseList() {
-    const [data, setData] = useState(courseRows);
+    const location = useLocation();
+    const { courseList } = location.state;
 
-    const handleDelete = (id) => {
-        setData(data.filter((item) => item.id !== id));
-    };
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const coursesResponse = await services.getCourseList();
+            setData(coursesResponse.data.data);
+        };
+
+        if (courseList) setData(courseList);
+        else fetchApi();
+    }, []);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5 },
@@ -70,13 +48,9 @@ function CourseList() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Link to={'/course/' + params.row.id}>
+                        <Link to={'/course/' + params.row.id} state={{ data: params.row }}>
                             <button className={cx('dataGridEditBtn')}>Edit</button>
                         </Link>
-                        <DeleteOutline
-                            className={cx('dataGridDeleteBtn')}
-                            onClick={() => handleDelete(params.row.id)}
-                        />
                     </>
                 );
             },
@@ -84,9 +58,28 @@ function CourseList() {
     ];
 
     return (
-        <div className={cx('courseList')}>
-            <DataGrid rows={data} columns={columns} pageSize={8} disableSelectionOnClick checkboxSelection />
-        </div>
+        <LoadingOverlay
+            active={data.length === 0}
+            spinner
+            text="Loading..."
+            className={cx('courseList')}
+            styles={{
+                overlay: (base) => ({
+                    ...base,
+                    background: 'white',
+                    color: 'black',
+                }),
+                spinner: (base) => ({
+                    ...base,
+                    width: '65px',
+                    '& svg circle': {
+                        stroke: 'black',
+                    },
+                }),
+            }}
+        >
+            <DataGrid rows={data} columns={columns} disableSelectionOnClick checkboxSelection />
+        </LoadingOverlay>
     );
 }
 

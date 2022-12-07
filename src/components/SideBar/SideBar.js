@@ -12,14 +12,39 @@ import {
     WorkOutline,
 } from '@mui/icons-material';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './SideBar.module.scss';
+import * as services from '~/services/services';
 
 const cx = classNames.bind(styles);
 
 function SideBar() {
+    const [transactionList, setTransactionList] = useState([]);
+    const [courseList, setCourseList] = useState([]);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const res = await services.getTransactionList();
+            const transactionList = res.data;
+            for (let i = 0; i < transactionList.length; i++) {
+                let userInfo = await services.getUserById(transactionList[i].userId);
+                if (userInfo != null)
+                    transactionList[i] = {
+                        ...transactionList[i],
+                        userInfo: userInfo.data,
+                    };
+            }
+            setTransactionList(transactionList);
+
+            const coursesResponse = await services.getCourseList();
+            setCourseList(coursesResponse.data.data);
+        };
+
+        fetchApi();
+    }, []);
+
     let [dummyData, setDummyData] = useState([
         {
             title: 'Dashboard',
@@ -140,6 +165,7 @@ function SideBar() {
                                             to={item.link}
                                             className={cx('link')}
                                             onClick={() => handleLink(data.title, item.title)}
+                                            state={{ transactionList: transactionList, courseList: courseList }}
                                         >
                                             {item.active ? (
                                                 <li className={cx('sidebarListItem', 'active')}>

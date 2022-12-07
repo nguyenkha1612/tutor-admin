@@ -17,7 +17,7 @@ export const handleQuantity = (amount, delimiter) => {
     return result;
 };
 
-export const handleDate = (date) => {
+export const handleDateTime = (date) => {
     let result = '';
     if (date.getDay() === 0) result += 'Chủ nhật';
     else result += 'Thứ ' + Number(date.getDay() + 1);
@@ -27,7 +27,7 @@ export const handleDate = (date) => {
         ' ' +
         date.getDate() +
         '/' +
-        date.getMonth() +
+        Number(date.getMonth() + 1) +
         '/' +
         date.getFullYear() +
         ' ' +
@@ -35,4 +35,16 @@ export const handleDate = (date) => {
         ':' +
         date.getMinutes()
     );
+};
+
+export const handleDate = (date) => {
+    let result = '';
+    if (date.getDay() === 0) result += 'Chủ nhật';
+    else result += 'Thứ ' + Number(date.getDay() + 1);
+
+    return result + ' ' + date.getDate() + '/' + Number(date.getMonth() + 1) + '/' + date.getFullYear();
+};
+
+export const upperCaseFirstLetter = (text) => {
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };

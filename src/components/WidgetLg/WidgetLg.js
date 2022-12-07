@@ -1,15 +1,15 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 
-import styles from './WidgetLg.module.scss';
-import { handleDate } from '~/utils/commonFunc';
 import { memo } from 'react';
+import { handleDate, upperCaseFirstLetter } from '~/utils/commonFunc';
+import styles from './WidgetLg.module.scss';
 
 const cx = classNames.bind(styles);
 
 function WidgetLg({ data }) {
     const Button = ({ type }) => {
-        type = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+        type = upperCaseFirstLetter(type);
         return <button className={cx('widgetLgButton', type)}>{type}</button>;
     };
 
