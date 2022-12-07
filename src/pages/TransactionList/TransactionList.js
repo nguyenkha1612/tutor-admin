@@ -1,16 +1,20 @@
 import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 import LoadingOverlay from 'react-loading-overlay-ts';
 
 import * as services from '~/services/services';
-import { handleDate } from '~/utils/commonFunc';
+import { handleDateTime } from '~/utils/commonFunc';
 import styles from './TransactionList.module.scss';
 
 const cx = className.bind(styles);
 
 function TransactionList() {
+    const location = useLocation();
+    const { transactionList } = location.state;
+
+    console.log(transactionList);
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -25,12 +29,12 @@ function TransactionList() {
                         userInfo: userInfo.data,
                     };
             }
-
             setData(transactionList);
             console.log(transactionList);
         };
 
-        fetchApi();
+        if (transactionList) setData(transactionList);
+        else fetchApi();
     }, []);
 
     const columns = [
@@ -42,7 +46,7 @@ function TransactionList() {
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
-                        <img className={cx('userListImg')} src={params.row.userInfo.urlAvt} alt="" />
+                        <img className={cx('userListImg')} src={params.row.userInfo.urlAvt} alt="avatar" />
                         {params.row.userInfo.email}
                     </div>
                 );
@@ -61,7 +65,7 @@ function TransactionList() {
             headerName: 'Thời gian giao dịch',
             flex: 1.5,
             renderCell: (params) => {
-                return <>{handleDate(new Date(params.row.createdAt))}</>;
+                return <>{handleDateTime(new Date(params.row.createdAt))}</>;
             },
         },
         {
@@ -79,7 +83,7 @@ function TransactionList() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Link to={'/transaction/' + params.row.id}>
+                        <Link to={'/transaction/' + params.row.id} state={{ data: params.row }}>
                             <button className={cx('dataGridEditBtn')}>Edit</button>
                         </Link>
                     </>
@@ -109,7 +113,7 @@ function TransactionList() {
                 }),
             }}
         >
-            <DataGrid rows={data} columns={columns} pageSize={8} disableSelectionOnClick checkboxSelection />
+            <DataGrid rows={data} columns={columns} disableSelectionOnClick checkboxSelection />
         </LoadingOverlay>
     );
 }

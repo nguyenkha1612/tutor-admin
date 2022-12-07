@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function WidgetSm({ data }) {
-    data = data.slice(0, 5);
-
     return (
         <div className={cx('widgetSm')}>
             <span className={cx('widgetSmTitle')}>Thành viên mới gia nhập</span>
