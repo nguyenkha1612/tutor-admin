@@ -31,7 +31,6 @@ function TopBar() {
 
     const handleLogout = () => {
         dispatch(logout());
-        // window.location.href = '/';
     };
 
     const MENU_ITEMS = [
@@ -51,10 +50,6 @@ function TopBar() {
     const refOverClickOutSide = useRef();
     const [isShow, setIsShow] = useState(false);
     useOnClickOutside(refOverClickOutSide, () => setIsShow(!isShow));
-    const toggleDropdown = () => {
-        // setIsShow(!isShow);
-        // console.log(isShow);
-    };
 
     return (
         <div className={cx('topbar')}>
@@ -73,10 +68,10 @@ function TopBar() {
                     </Notification>
                     <Menu items={MENU_ITEMS} onChange={handleMenuChange}>
                         {auth.user ? (
-                            <Link to={'/user/1'}>
+                            <Link to={'/user/' + auth.user.id}>
                                 <div className={cx('user')}>
                                     <span className={cx('user-name')}>{auth.user.name} </span>
-                                    <img src={DefaultImage} alt="" className={cx('topAvatar')} />
+                                    <img src={auth.user.urlAvt} alt="avatar" className={cx('topAvatar')} />
                                 </div>
                             </Link>
                         ) : (

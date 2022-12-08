@@ -1,10 +1,11 @@
+import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
+import LoadingOverlay from 'react-loading-overlay-ts';
 import { Link, useLocation } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
-import className from 'classnames/bind';
-import styles from './CourseList.module.scss';
 import * as services from '~/services/services';
-import LoadingOverlay from 'react-loading-overlay-ts';
+import { handleQuantity } from '~/utils/commonFunc';
+import styles from './CourseList.module.scss';
 const cx = className.bind(styles);
 
 function CourseList() {
@@ -19,7 +20,7 @@ function CourseList() {
             setData(coursesResponse.data.data);
         };
 
-        if (courseList) setData(courseList);
+        if (courseList.length > 0) setData(courseList);
         else fetchApi();
     }, []);
 
@@ -35,6 +36,9 @@ function CourseList() {
             field: 'tuition',
             headerName: 'Học phí',
             flex: 1,
+            renderCell: (params) => {
+                return <>{handleQuantity(params.row.tuition, '.', ' VNĐ')}</>;
+            },
         },
         {
             field: 'status',

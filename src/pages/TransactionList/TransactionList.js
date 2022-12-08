@@ -5,7 +5,7 @@ import DataGrid from '~/components/DataGrid';
 import LoadingOverlay from 'react-loading-overlay-ts';
 
 import * as services from '~/services/services';
-import { handleDateTime } from '~/utils/commonFunc';
+import { handleDateTime, handleQuantity } from '~/utils/commonFunc';
 import styles from './TransactionList.module.scss';
 
 const cx = className.bind(styles);
@@ -14,7 +14,6 @@ function TransactionList() {
     const location = useLocation();
     const { transactionList } = location.state;
 
-    console.log(transactionList);
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -30,11 +29,11 @@ function TransactionList() {
                     };
             }
             setData(transactionList);
-            console.log(transactionList);
         };
 
-        if (transactionList) setData(transactionList);
+        if (transactionList.length > 0) setData(transactionList);
         else fetchApi();
+        console.log(transactionList);
     }, []);
 
     const columns = [
@@ -42,7 +41,7 @@ function TransactionList() {
         {
             field: 'customer',
             headerName: 'Khách hàng',
-            flex: 1.5,
+            flex: 2,
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
@@ -55,9 +54,9 @@ function TransactionList() {
         {
             field: 'amount',
             headerName: 'Số tiền',
-            flex: 2,
+            flex: 1.5,
             renderCell: (params) => {
-                return <>{params.row.amount + ' ' + params.row.currencyCode}</>;
+                return <>{handleQuantity(params.row.amount, '.', ' ' + params.row.currencyCode)}</>;
             },
         },
         {

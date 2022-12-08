@@ -1,50 +1,27 @@
-import { memo, useState } from 'react';
-import className from 'classnames/bind';
 import {
+    AccessTimeOutlined,
     AttachMoney,
     CalendarToday,
     Description,
-    LocationSearching,
+    InfoOutlined,
+    LocationOnOutlined,
     MailOutline,
-    PermIdentity,
+    MaleOutlined,
+    PeopleAltOutlined,
     PhoneAndroid,
     School,
     Subject,
     Title,
+    WorkspacePremiumOutlined,
 } from '@mui/icons-material';
+import className from 'classnames/bind';
+import { memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import WidgetLg from '~/components/WidgetLg';
+import { handleDate, handleDateTime, handleGender, handleLevel, handleQuantity } from '~/utils/commonFunc';
 import styles from './Course.module.scss';
 
 const cx = className.bind(styles);
-
-const courseData = {
-    id: 1,
-    title: 'Tuyển gia sư dạy Vẽ',
-    description: 'Học viên nam 10 tuổi',
-    tuition: '5.000.000 VNĐ',
-    status: 'CREATE',
-    grade: {
-        id: 10,
-        name: 'Lớp 10',
-    },
-    subject: {
-        id: 12,
-        name: 'Vẽ',
-    },
-    user: {
-        id: 1,
-        avatar: 'https://i.pinimg.com/originals/a2/2b/fc/a22bfc39b99bacf8d3641d991093ff86.jpg',
-        name: 'Arianmu Grandu',
-        role: 'Học sinh',
-        userName: 'arianmugrandidi',
-        birthday: '10/12/1999',
-        phone: '+84 323 568 452',
-        email: 'arianmu@gmail.com',
-        address: 'New York | USA',
-    },
-};
 
 export default memo(function Course() {
     const location = useLocation();
@@ -56,65 +33,182 @@ export default memo(function Course() {
         <div className={cx('course')}>
             <div className={cx('courseTitleContainer')}>
                 <h1 className={cx('courseTitle')}>Chi tiết khoá học</h1>
-                <Link to="/newCourse">
-                    <button className={cx('courseAddButton')}>Tạo mới</button>
-                </Link>
             </div>
             <div className={cx('courseContainer')}>
                 <div className={cx('courseShow')}>
                     <div className={cx('courseShowBottom')}>
                         <span className={cx('courseShowTitle')}>Thông tin khoá học</span>
-                        <div className={cx('courseShowInfo')}>
-                            <Title className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.title}</span>
-                        </div>
-                        <div className={cx('courseShowInfo')}>
-                            <Description className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.description}</span>
-                        </div>
-                        <div className={cx('courseShowInfo')}>
-                            <AttachMoney className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.tuition}</span>
-                        </div>
-
-                        <span className={cx('courseShowTitle')}>Thông tin môn học</span>
-                        <div className={cx('courseShowInfo')}>
-                            <Subject className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.subject.name}</span>
-                        </div>
-                        <div className={cx('courseShowInfo')}>
-                            <School className={cx('courseShowIcon')} />
-                            <span className={cx('courseShowInfoTitle')}>{data.grade.name}</span>
-                        </div>
-
-                        <span className={cx('courseShowTitle')}>Thông tin người dạy</span>
-                        {/* <Link to={'/user/' + data.user.id} className={cx('userShowTop')}>
-                            <img src={data.user.avatar} alt="" className={cx('userShowImg')} />
-                            <div className={cx('userShowTopTitle')}>
-                                <span className={cx('userShowUserName')}>{data.user.name}</span>
-                                <span className={cx('userShowUserTitle')}>{data.user.role}</span>
+                        {data.title ? (
+                            <div className={cx('courseShowInfo')}>
+                                <Title className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Tên khoá học: {data.title}</span>
                             </div>
-                        </Link> */}
-                        <div className={cx('courseShowInfo')}>
-                            <PermIdentity className={cx('courseShowIcon')} />
-                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.userName}</span> */}
-                        </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.description ? (
+                            <div className={cx('courseShowInfo')}>
+                                <Description className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Mô tả: {data.description}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.subject.name ? (
+                            <div className={cx('courseShowInfo')}>
+                                <Subject className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Môn học: {data.subject.name}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.grade.name ? (
+                            <div className={cx('courseShowInfo')}>
+                                <School className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Độ tuổi học viên: {data.grade.name}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.level ? (
+                            <div className={cx('courseShowInfo')}>
+                                <WorkspacePremiumOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Cấp bậc giảng viên: {handleLevel(data.classRequirement.level)}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.address && data.classRequirement.address.fullAddress ? (
+                            <div className={cx('courseShowInfo')}>
+                                <LocationOnOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Địa chỉ: {data.classRequirement.address.fullAddress}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.amountStudent ? (
+                            <div className={cx('courseShowInfo')}>
+                                <PeopleAltOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Sĩ số: {data.classRequirement.amountStudent}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.dateStart && !data.classRequirement.dateEnd ? (
+                            <div className={cx('courseShowInfo')}>
+                                <CalendarToday className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Thời gian dạy: {handleDate(new Date(data.classRequirement.dateStart))}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.dateStart && data.classRequirement.dateEnd ? (
+                            <div className={cx('courseShowInfo')}>
+                                <CalendarToday className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Thời gian dạy: {handleDate(new Date(data.classRequirement.dateStart))}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.classRequirement.timeLesson ? (
+                            <div className={cx('courseShowInfo')}>
+                                <AccessTimeOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Số giờ học: {data.classRequirement.timeLesson + ' giờ'}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.tuition ? (
+                            <div className={cx('courseShowInfo')}>
+                                <AttachMoney className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Tiền lương: {handleQuantity(data.tuition, '.', ' VNĐ')}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                         <div className={cx('courseShowInfo')}>
                             <CalendarToday className={cx('courseShowIcon')} />
-                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.birthday}</span> */}
+                            <span className={cx('courseShowInfoTitle')}>
+                                Ngày tạo: {handleDateTime(new Date(data.createdAt))}
+                            </span>
                         </div>
-                        <div className={cx('courseShowInfo')}>
-                            <PhoneAndroid className={cx('courseShowIcon')} />
-                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.phone}</span> */}
-                        </div>
-                        <div className={cx('courseShowInfo')}>
-                            <MailOutline className={cx('courseShowIcon')} />
-                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.email}</span> */}
-                        </div>
-                        <div className={cx('courseShowInfo')}>
-                            <LocationSearching className={cx('courseShowIcon')} />
-                            {/* <span className={cx('courseShowInfoTitle')}>{data.user.address}</span> */}
-                        </div>
+                        {data.status ? (
+                            <div className={cx('courseShowInfo')}>
+                                <InfoOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Trạng thái: {data.status}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
+                        <span className={cx('courseShowTitle')}>Thông tin người tạo</span>
+                        <Link to={'/user/' + data.createdBy.id} className={cx('userShowTop')}>
+                            <img src={data.createdBy.urlAvt} alt="avatar" className={cx('userShowImg')} />
+                            <div className={cx('userShowTopTitle')}>
+                                <span className={cx('userShowUserName')}>{data.createdBy.name}</span>
+                                {/* <span className={cx('userShowUserTitle')}>{data.createdBy.role}</span> */}
+                            </div>
+                        </Link>
+                        {data.createdBy.gender ? (
+                            <div className={cx('courseShowInfo')}>
+                                <MaleOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Giới tính: {handleGender(data.createdBy.gender)}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.createdBy.birthday ? (
+                            <div className={cx('courseShowInfo')}>
+                                <CalendarToday className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Ngày sinh: {handleDate(new Date(data.createdBy.birthday))}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.createdBy.phone ? (
+                            <div className={cx('courseShowInfo')}>
+                                <PhoneAndroid className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Số điện thoại: {data.createdBy.phone}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.createdBy.email ? (
+                            <div className={cx('courseShowInfo')}>
+                                <MailOutline className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>Email: {data.createdBy.email}</span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {data.createdBy.addresses[0] ? (
+                            <div className={cx('courseShowInfo')}>
+                                <LocationOnOutlined className={cx('courseShowIcon')} />
+                                <span className={cx('courseShowInfoTitle')}>
+                                    Địa chỉ: {data.createdBy.addresses[0]}
+                                </span>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
                 <div className={cx('courseUpdate')}>

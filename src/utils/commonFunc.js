@@ -1,4 +1,4 @@
-export const handleQuantity = (amount, delimiter) => {
+export const handleQuantity = (amount, delimiter, currency = '') => {
     let result = '';
     let split = '';
 
@@ -14,7 +14,7 @@ export const handleQuantity = (amount, delimiter) => {
             result = split + result;
         } else break;
     } while (split != null && split.length > 0);
-    return result;
+    return result + currency;
 };
 
 export const handleDateTime = (date) => {
@@ -22,19 +22,23 @@ export const handleDateTime = (date) => {
     if (date.getDay() === 0) result += 'Chủ nhật';
     else result += 'Thứ ' + Number(date.getDay() + 1);
 
-    return (
-        result +
-        ' ' +
-        date.getDate() +
-        '/' +
-        Number(date.getMonth() + 1) +
-        '/' +
-        date.getFullYear() +
-        ' ' +
-        date.getHours() +
-        ':' +
-        date.getMinutes()
-    );
+    let dateResult = '';
+    if (date.getDate().toString().length === 1) dateResult = '0' + date.getDate();
+    else dateResult = date.getDate();
+
+    let month = '';
+    if (date.getMonth().toString().length === 1) month = '0' + Number(date.getMonth() + 1);
+    else month = Number(date.getMonth() + 1);
+
+    let hours = '';
+    if (date.getHours().toString().length === 1) hours = '0' + date.getHours();
+    else hours = date.getHours();
+
+    let minutes = '';
+    if (date.getMinutes().toString().length === 1) minutes = '0' + date.getMinutes();
+    else minutes = date.getMinutes();
+
+    return result + ' ' + dateResult + '/' + month + '/' + date.getFullYear() + ' ' + hours + ':' + minutes;
 };
 
 export const handleDate = (date) => {
@@ -42,9 +46,29 @@ export const handleDate = (date) => {
     if (date.getDay() === 0) result += 'Chủ nhật';
     else result += 'Thứ ' + Number(date.getDay() + 1);
 
-    return result + ' ' + date.getDate() + '/' + Number(date.getMonth() + 1) + '/' + date.getFullYear();
+    let dateResult = '';
+    if (date.getDate().toString().length === 1) dateResult = '0' + date.getDate();
+    else dateResult = date.getDate();
+
+    let month = '';
+    if (date.getMonth().toString().length === 1) month = '0' + Number(date.getMonth() + 1);
+    else month = Number(date.getMonth() + 1);
+
+    return result + ' ' + dateResult + '/' + month + '/' + date.getFullYear();
 };
 
 export const upperCaseFirstLetter = (text) => {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
+
+export const handleGender = (text) => {
+    if (text.toLowerCase() === 'male') return 'Nam';
+    else if (text.toLowerCase() === 'female') return 'Nữ';
+    else return 'Trống';
+};
+
+export const handleLevel = (text) => {
+    if (text.toLowerCase() === 'student') return 'Học sinh';
+    else if (text.toLowerCase() === 'teacher') return 'Giáo viên';
+    else return 'Trống';
 };

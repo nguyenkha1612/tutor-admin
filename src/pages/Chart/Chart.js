@@ -1,9 +1,11 @@
 import className from 'classnames/bind';
+import { useEffect } from 'react';
 import { memo, useRef, useState } from 'react';
+import LoadingOverlay from 'react-loading-overlay-ts';
 
 import ChartComponent from '~/components/Chart';
 import { userData } from '~/dummyData';
-
+import * as services from '~/services/services';
 import styles from './Chart.module.scss';
 
 const cx = className.bind(styles);
@@ -111,53 +113,105 @@ const newTransactionData = [
 ];
 
 const options = [
-    { label: 2022, value: 2022 },
-    { label: 2021, value: 2021 },
-    { label: 2020, value: 2020 },
+    { label: new Date().getFullYear(), value: new Date().getFullYear() },
+    { label: new Date().getFullYear() - 1, value: new Date().getFullYear() - 1 },
+    { label: new Date().getFullYear() - 2, value: new Date().getFullYear() - 2 },
 ];
 
 export default memo(function Chart() {
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const currentYear = useRef(options[0].value);
+    const [revenueYearly, setRevenueYearly] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchApi = async () => {
+        setLoading(true);
+        let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
+        const revenueRes = await services.getRevenueYearly(currentYear.current);
+        let revenue = [];
+
+        await revenueRes.data.forEach((data) => {
+            revenue.push({
+                name: 'Tháng ' + data.month,
+                'Doanh thu': Number(data.amount) * currencyRate,
+            });
+        });
+
+        setRevenueYearly(revenue);
+        console.log(revenueYearly);
+
+        const usersRes = await services.getUserList();
+        let userList = usersRes.data;
+
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchApi();
+    }, []);
 
     const handleChangeYear = (e) => {
-        setCurrentYear(e.target.value);
+        currentYear.current = e.target.value;
+        fetchApi();
     };
 
     return (
         <div className={cx('chartWrapper')}>
             <div className={cx('chart')}>
-                <select onChange={handleChangeYear} className={cx('select-year')}>
+                <select value={currentYear.current} onChange={handleChangeYear} className={cx('select-year')}>
                     {options.map((option) => (
-                        <option key={option.label} value={option.value}>
+                        <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
                     ))}
                 </select>
             </div>
-            <div className={cx('chart')}>
-                <ChartComponent
-                    data={userData}
-                    title={'Biểu đồ doanh thu năm ' + currentYear}
-                    grid
-                    dataKey="Doanh thu"
-                />
-            </div>
-            <div className={cx('chart')}>
-                <ChartComponent
-                    data={newUserData}
-                    title={'Biểu đồ người dùng mới năm ' + currentYear}
-                    grid
-                    dataKey="number"
-                />
-            </div>
-            <div className={cx('chart')}>
-                <ChartComponent
-                    data={newTransactionData}
-                    title={'Biểu đồ số lượt giao dịch năm ' + currentYear}
-                    grid
-                    dataKey="number"
-                />
-            </div>
+            <LoadingOverlay
+                active={loading}
+                spinner
+                text="Loading..."
+                className={cx('overlay')}
+                styles={{
+                    overlay: (base) => ({
+                        ...base,
+                        background: 'white',
+                        color: 'black',
+                    }),
+                    spinner: (base) => ({
+                        ...base,
+                        width: '65px',
+                        '& svg circle': {
+                            stroke: 'black',
+                        },
+                    }),
+                }}
+            >
+                <div style={loading ? { display: 'none' } : { display: 'block' }}>
+                    <div className={cx('chart')}>
+                        <ChartComponent
+                            data={revenueYearly}
+                            title={'Biểu đồ doanh thu năm ' + currentYear.current}
+                            grid
+                            dataKey="Doanh thu"
+                        />
+                    </div>
+                    <div className={cx('chart')}>
+                        <ChartComponent
+                            data={newUserData}
+                            title={'Biểu đồ người dùng mới năm ' + currentYear.current}
+                            grid
+                            dataKey="number"
+                        />
+                    </div>
+                    <div className={cx('chart')}>
+                        <ChartComponent
+                            data={newTransactionData}
+                            title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
+                            grid
+                            dataKey="number"
+                        />
+                    </div>
+                </div>
+            </LoadingOverlay>
         </div>
     );
 });
