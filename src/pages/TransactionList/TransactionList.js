@@ -11,8 +11,8 @@ import styles from './TransactionList.module.scss';
 const cx = className.bind(styles);
 
 function TransactionList() {
-    const location = useLocation();
-    const { transactionList } = location.state;
+    // const location = useLocation();
+    // const { transactionList } = location.state;
 
     const [data, setData] = useState([]);
 
@@ -20,20 +20,21 @@ function TransactionList() {
         const fetchApi = async () => {
             const res = await services.getTransactionList();
             const transactionList = res.data;
-            for (let i = 0; i < transactionList.length; i++) {
-                let userInfo = await services.getUserById(transactionList[i].userId);
-                if (userInfo != null)
-                    transactionList[i] = {
-                        ...transactionList[i],
-                        userInfo: userInfo.data,
-                    };
-            }
-            setData(transactionList);
+            // for (let i = 0; i < transactionList.length; i++) {
+            //     let userInfo = await services.getUserById(transactionList[i].userId);
+            //     if (userInfo != null)
+            //         transactionList[i] = {
+            //             ...transactionList[i],
+            //             userInfo: userInfo.data,
+            //         };
+            // }
+            // setData(transactionList);
         };
 
-        if (transactionList.length > 0) setData(transactionList);
-        else fetchApi();
-        console.log(transactionList);
+        // if (transactionList.length > 0) setData(transactionList);
+        // else
+        // fetchApi();
+        // console.log(transactionList);
     }, []);
 
     const columns = [

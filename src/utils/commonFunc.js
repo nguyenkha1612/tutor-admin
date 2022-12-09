@@ -1,6 +1,12 @@
-export const handleQuantity = (amount, delimiter, currency = '') => {
+export const handleQuantity = (amount, delimiter = '.', currency = '') => {
     let result = '';
     let split = '';
+    let negative = '';
+
+    if (amount < 0) {
+        negative = '-';
+        amount = Math.abs(amount);
+    }
 
     amount += '';
     do {
@@ -14,7 +20,7 @@ export const handleQuantity = (amount, delimiter, currency = '') => {
             result = split + result;
         } else break;
     } while (split != null && split.length > 0);
-    return result + currency;
+    return negative + result + currency;
 };
 
 export const handleDateTime = (date) => {

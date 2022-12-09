@@ -16,11 +16,11 @@ function FeatureInfo({ data = [] }) {
                         <span className={cx('featuredTitle')}>{data.title}</span>
                         <div className={cx('featuredMoneyContainer')}>
                             <span className={cx('featuredMoney')}>
-                                {handleQuantity(data.currentQuantity, '.')} {data.unit}
+                                {handleQuantity(data.currentQuantity, '.', data.unit)}
                             </span>
                             <span className={cx('featuredMoneyRate')}>
-                                {data.quantityRate > 0 ? '+' + data.quantityRate : data.quantityRate}
-                                {data.quantityRateUnit}
+                                {data.quantityRate > 0 ? '+' : ''}
+                                {handleQuantity(data.quantityRate, '.', data.quantityRateUnit)}
                                 {data.quantityRate > 0 ? (
                                     <ArrowUpward className={cx('featuredIcon')} />
                                 ) : (
