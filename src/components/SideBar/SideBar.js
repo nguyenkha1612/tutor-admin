@@ -12,11 +12,11 @@ import {
     WorkOutline,
 } from '@mui/icons-material';
 import classNames from 'classnames/bind';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import styles from './SideBar.module.scss';
 import * as services from '~/services/services';
+import styles from './SideBar.module.scss';
 
 const cx = classNames.bind(styles);
 

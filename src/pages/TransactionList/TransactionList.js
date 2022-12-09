@@ -1,5 +1,5 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 import LoadingOverlay from 'react-loading-overlay-ts';
@@ -11,43 +11,43 @@ import styles from './TransactionList.module.scss';
 const cx = className.bind(styles);
 
 function TransactionList() {
-    // const location = useLocation();
-    // const { transactionList } = location.state;
+    const location = useLocation();
+    const { transactionList } = location.state;
+    const currentPage = useRef(1);
 
     const [data, setData] = useState([]);
 
-    useEffect(() => {
-        const fetchApi = async () => {
-            const res = await services.getTransactionList();
-            const transactionList = res.data;
-            // for (let i = 0; i < transactionList.length; i++) {
-            //     let userInfo = await services.getUserById(transactionList[i].userId);
-            //     if (userInfo != null)
-            //         transactionList[i] = {
-            //             ...transactionList[i],
-            //             userInfo: userInfo.data,
-            //         };
-            // }
-            // setData(transactionList);
-        };
+    const fetchApi = async (page) => {
+        const res = await services.getTransactionList(page);
+        setData((prev) => [...prev, ...res.data]);
+    };
 
-        // if (transactionList.length > 0) setData(transactionList);
-        // else
-        // fetchApi();
-        // console.log(transactionList);
+    useEffect(() => {
+        if (transactionList.length > 0) setData(transactionList);
+        else fetchApi();
+        console.log(transactionList);
     }, []);
 
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 0.5 },
+        {
+            field: 'id',
+            headerName: 'ID',
+            flex: 0.35,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+            align: 'center',
+        },
         {
             field: 'customer',
             headerName: 'Khách hàng',
             flex: 2,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
-                        <img className={cx('userListImg')} src={params.row.userInfo.urlAvt} alt="avatar" />
-                        {params.row.userInfo.email}
+                        <img className={cx('userListImg')} src={params.row.user.urlAvt} alt="avatar" />
+                        {params.row.user.email}
                     </div>
                 );
             },
@@ -55,7 +55,10 @@ function TransactionList() {
         {
             field: 'amount',
             headerName: 'Số tiền',
-            flex: 1.5,
+            flex: 1,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return <>{handleQuantity(params.row.amount, '.', ' ' + params.row.currencyCode)}</>;
             },
@@ -64,6 +67,9 @@ function TransactionList() {
             field: 'createdAt',
             headerName: 'Thời gian giao dịch',
             flex: 1.5,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return <>{handleDateTime(new Date(params.row.createdAt))}</>;
             },
@@ -71,7 +77,10 @@ function TransactionList() {
         {
             field: 'paymentMethod',
             headerName: 'Phương thức thanh toán',
-            flex: 1,
+            flex: 1.2,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return <>{params.row.method}</>;
             },
@@ -80,17 +89,27 @@ function TransactionList() {
             field: 'action',
             headerName: 'Chỉnh sửa',
             flex: 1,
+            headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return (
                     <>
                         <Link to={'/transaction/' + params.row.id} state={{ data: params.row }}>
-                            <button className={cx('dataGridEditBtn')}>Edit</button>
+                            <button className={cx('dataGridEditBtn')}>View</button>
                         </Link>
                     </>
                 );
             },
         },
     ];
+
+    const onPageChange = (e) => {
+        if (!(e < currentPage.current)) {
+            currentPage.current = e + 1;
+            fetchApi(currentPage.current);
+        }
+    };
 
     return (
         <LoadingOverlay
@@ -113,7 +132,7 @@ function TransactionList() {
                 }),
             }}
         >
-            <DataGrid rows={data} columns={columns} disableSelectionOnClick checkboxSelection />
+            <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
         </LoadingOverlay>
     );
 }
