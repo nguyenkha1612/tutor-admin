@@ -46,9 +46,14 @@ export const getCourseList = async () => {
     }
 };
 
-export const getTransactionList = async () => {
+export const getTransactionList = async (currentPage, maxResult) => {
     try {
-        const res = await instance.get('/v1/payment/history-all');
+        const res = await instance.get('/v1/payment/history-all', {
+            params: {
+                current_page: currentPage,
+                max_result: maxResult,
+            },
+        });
         return res.data;
     } catch (error) {
         console.log(error);

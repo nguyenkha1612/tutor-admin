@@ -9,6 +9,7 @@ import WidgetLg from '~/components/WidgetLg';
 import * as services from '~/services/services';
 
 import styles from './Home.module.scss';
+import LoadingOverlay from 'react-loading-overlay-ts';
 
 const cx = className.bind(styles);
 
@@ -17,8 +18,10 @@ export default memo(function Home() {
     const [featureData, setFeatureData] = useState([]);
     const [userList, setUserList] = useState([]);
     const [transactionList, setTransactionList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
 
         let currentDate = new Date();
@@ -45,12 +48,15 @@ export default memo(function Home() {
 
             setRevenueYearly(revenue);
             let feature = [];
+            let isInfinity = !Number.isFinite(Math.round((revenueThisMonth / revenueLastMonth - 1) * 100 * 100) / 100);
             feature.push({
                 title: 'Doanh thu',
                 currentQuantity: revenueThisMonth * currencyRate,
-                unit: 'VNĐ',
-                quantityRate: Math.round((revenueThisMonth / revenueLastMonth - 1) * 100 * 100) / 100,
-                quantityRateUnit: '%',
+                unit: ' VNĐ',
+                quantityRate: isInfinity
+                    ? (revenueThisMonth - revenueLastMonth) * currencyRate
+                    : Math.round((revenueThisMonth / revenueLastMonth - 1) * 100 * 100) / 100,
+                quantityRateUnit: isInfinity ? ' VNĐ' : '%',
                 featuredSub: 'So với tháng trước',
             });
 
@@ -68,7 +74,7 @@ export default memo(function Home() {
             feature.push({
                 title: 'Lớp học mới',
                 currentQuantity: newCoursesThisMonth,
-                unit: 'lớp',
+                unit: ' lớp',
                 quantityRate: newCoursesThisMonth - newCoursesLastMonth,
                 quantityRateUnit: ' lớp',
                 featuredSub: 'So với tháng trước',
@@ -88,24 +94,11 @@ export default memo(function Home() {
             feature.push({
                 title: 'Số lượt giao dịch',
                 currentQuantity: transactionsThisMonth,
-                unit: 'giao dịch',
+                unit: ' giao dịch',
                 quantityRate: transactionsThisMonth - transactionsLastMonth,
                 quantityRateUnit: ' giao dịch',
                 featuredSub: 'So với tháng trước',
             });
-
-            let transactionsSorted = transactionRes.data.sort(function (a, b) {
-                return b.createdAt - a.createdAt;
-            });
-
-            for (let i = 0; i < transactionsSorted.length; i++) {
-                let userInfo = await services.getUserById(transactionsSorted[i].userId);
-                if (userInfo != null)
-                    transactionsSorted[i] = {
-                        ...transactionsSorted[i],
-                        userInfo: userInfo.data,
-                    };
-            }
 
             setTransactionList(
                 transactionRes.data
@@ -132,16 +125,40 @@ export default memo(function Home() {
 
         fetchApiFeatureInfo();
         fetchApiRecentlyUser();
+        setLoading(false);
     }, []);
 
     return (
-        <div className={cx('homeWrapper')}>
-            <FeaturedInfo data={featureData} />
-            <Chart data={revenueYearly} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
-            <div className={cx('homeWidgets')}>
-                <WidgetSm data={userList} />
-                <WidgetLg data={transactionList} />
+        <LoadingOverlay
+            active={loading}
+            spinner
+            text="Loading..."
+            className={cx('overlay')}
+            styles={{
+                overlay: (base) => ({
+                    ...base,
+                    background: 'white',
+                    color: 'black',
+                }),
+                spinner: (base) => ({
+                    ...base,
+                    width: '65px',
+                    '& svg circle': {
+                        stroke: 'black',
+                    },
+                }),
+            }}
+        >
+            <div style={loading ? { display: 'none' } : { display: 'block' }}>
+                <div className={cx('homeWrapper')}>
+                    <FeaturedInfo data={featureData} />
+                    <Chart data={revenueYearly} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
+                    <div className={cx('homeWidgets')}>
+                        <WidgetSm data={userList} />
+                        <WidgetLg data={transactionList} />
+                    </div>
+                </div>
             </div>
-        </div>
+        </LoadingOverlay>
     );
 });

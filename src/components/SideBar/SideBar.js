@@ -12,7 +12,7 @@ import {
     WorkOutline,
 } from '@mui/icons-material';
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './SideBar.module.scss';
@@ -23,20 +23,15 @@ const cx = classNames.bind(styles);
 function SideBar() {
     const [transactionList, setTransactionList] = useState([]);
     const [courseList, setCourseList] = useState([]);
+    const [userList, setUserList] = useState([]);
 
     useEffect(() => {
         const fetchApi = async () => {
-            const res = await services.getTransactionList();
-            const transactionList = res.data;
-            for (let i = 0; i < transactionList.length; i++) {
-                let userInfo = await services.getUserById(transactionList[i].userId);
-                if (userInfo != null)
-                    transactionList[i] = {
-                        ...transactionList[i],
-                        userInfo: userInfo.data,
-                    };
-            }
-            setTransactionList(transactionList);
+            const usersResponse = await services.getUserList();
+            setUserList(usersResponse.data);
+
+            const transactionsResponse = await services.getTransactionList(1);
+            setTransactionList(transactionsResponse.data);
 
             const coursesResponse = await services.getCourseList();
             setCourseList(coursesResponse.data.data);
@@ -45,7 +40,7 @@ function SideBar() {
         fetchApi();
     }, []);
 
-    let [dummyData, setDummyData] = useState([
+    let [dashboard, setDashboard] = useState([
         {
             title: 'Dashboard',
             list: [
@@ -141,19 +136,19 @@ function SideBar() {
     ]);
 
     const handleLink = (dataTitle, itemTitle) => {
-        let newDummyData = [...dummyData];
-        newDummyData.forEach((data) => {
+        let newDashboard = [...dashboard];
+        newDashboard.forEach((data) => {
             data.list.forEach((item) => {
                 data.title === dataTitle && item.title === itemTitle ? (item.active = true) : (item.active = false);
             });
         });
-        setDummyData(newDummyData);
+        setDashboard(newDashboard);
     };
 
     return (
         <div className={cx('sidebar')}>
             <div className={cx('sidebarWrapper')}>
-                {dummyData.map((data, index) => {
+                {dashboard.map((data, index) => {
                     return (
                         <div key={index} className={cx('sidebarMenu')}>
                             <h3 className={cx('sidebarTitle')}>{data.title}</h3>
@@ -165,7 +160,11 @@ function SideBar() {
                                             to={item.link}
                                             className={cx('link')}
                                             onClick={() => handleLink(data.title, item.title)}
-                                            state={{ transactionList: transactionList, courseList: courseList }}
+                                            state={{
+                                                transactionList: transactionList,
+                                                courseList: courseList,
+                                                userList: userList,
+                                            }}
                                         >
                                             {item.active ? (
                                                 <li className={cx('sidebarListItem', 'active')}>

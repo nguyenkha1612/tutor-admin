@@ -28,13 +28,9 @@ function WidgetLg({ data }) {
                         return (
                             <tr key={transaction.id} className={cx('widgetLgTr')}>
                                 <td>
-                                    <Link to={'/user/' + transaction.userId} className={cx('widgetLgUser')}>
-                                        <img
-                                            src={transaction.userInfo.urlAvt}
-                                            alt="avatar"
-                                            className={cx('widgetLgImg')}
-                                        />
-                                        <span className={cx('widgetLgName')}>{transaction.userInfo.name}</span>
+                                    <Link to={'/user/' + transaction.user.id} className={cx('widgetLgUser')}>
+                                        <img src={transaction.user.urlAvt} alt="avatar" className={cx('widgetLgImg')} />
+                                        <span className={cx('widgetLgName')}>{transaction.user.name}</span>
                                     </Link>
                                 </td>
                                 <td className={cx('widgetLgDate')}>{handleDate(new Date(transaction.createdAt))}</td>
