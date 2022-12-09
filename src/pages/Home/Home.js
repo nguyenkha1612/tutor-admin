@@ -18,7 +18,7 @@ export default memo(function Home() {
     const [featureData, setFeatureData] = useState([]);
     const [userList, setUserList] = useState([]);
     const [transactionList, setTransactionList] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setLoading(true);

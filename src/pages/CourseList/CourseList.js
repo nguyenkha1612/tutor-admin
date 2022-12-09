@@ -25,17 +25,20 @@ function CourseList() {
     }, []);
 
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 0.5 },
+        { field: 'id', headerName: 'ID', flex: 0.35, headerAlign: 'center', align: 'center' },
         {
             field: 'title',
             headerName: 'Tiêu đề',
             flex: 2.5,
+            headerAlign: 'center',
         },
-        { field: 'description', headerName: 'Mô tả', flex: 2.5 },
+        { field: 'description', headerName: 'Mô tả', flex: 2.5, headerAlign: 'center' },
         {
             field: 'tuition',
             headerName: 'Học phí',
             flex: 1,
+            headerAlign: 'center',
+
             renderCell: (params) => {
                 return <>{handleQuantity(params.row.tuition, '.', ' VNĐ')}</>;
             },
@@ -44,16 +47,20 @@ function CourseList() {
             field: 'status',
             headerName: 'Trạng thái',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
         },
         {
             field: 'action',
             headerName: 'Chỉnh sửa',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return (
                     <>
                         <Link to={'/course/' + params.row.id} state={{ data: params.row }}>
-                            <button className={cx('dataGridEditBtn')}>Edit</button>
+                            <button className={cx('dataGridEditBtn')}>View</button>
                         </Link>
                     </>
                 );
@@ -82,7 +89,7 @@ function CourseList() {
                 }),
             }}
         >
-            <DataGrid rows={data} columns={columns} disableSelectionOnClick checkboxSelection />
+            <DataGrid rows={data} columns={columns} disableSelectionOnClick />
         </LoadingOverlay>
     );
 }

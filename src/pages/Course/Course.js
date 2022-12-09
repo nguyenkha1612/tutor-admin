@@ -203,7 +203,7 @@ export default memo(function Course() {
                             <div className={cx('courseShowInfo')}>
                                 <LocationOnOutlined className={cx('courseShowIcon')} />
                                 <span className={cx('courseShowInfoTitle')}>
-                                    Địa chỉ: {data.createdBy.addresses[0]}
+                                    Địa chỉ: {data.createdBy.addresses[0].fullAddress}
                                 </span>
                             </div>
                         ) : (

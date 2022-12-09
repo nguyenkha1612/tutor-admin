@@ -1,65 +1,12 @@
 import className from 'classnames/bind';
-import { useEffect } from 'react';
-import { memo, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
 
 import ChartComponent from '~/components/Chart';
-import { userData } from '~/dummyData';
 import * as services from '~/services/services';
 import styles from './Chart.module.scss';
 
 const cx = className.bind(styles);
-
-const newUserData = [
-    {
-        name: 'Jan',
-        number: 110,
-    },
-    {
-        name: 'Feb',
-        number: 120,
-    },
-    {
-        name: 'Mar',
-        number: 140,
-    },
-    {
-        name: 'Apr',
-        number: 160,
-    },
-    {
-        name: 'May',
-        number: 60,
-    },
-    {
-        name: 'Jun',
-        number: 80,
-    },
-    {
-        name: 'Jul',
-        number: 50,
-    },
-    {
-        name: 'Agu',
-        number: 100,
-    },
-    {
-        name: 'Sep',
-        number: 150,
-    },
-    {
-        name: 'Oct',
-        number: 200,
-    },
-    {
-        name: 'Nov',
-        number: 220,
-    },
-    {
-        name: 'Dec',
-        number: 165,
-    },
-];
 
 const newTransactionData = [
     {
@@ -121,6 +68,8 @@ const options = [
 export default memo(function Chart() {
     const currentYear = useRef(options[0].value);
     const [revenueYearly, setRevenueYearly] = useState([]);
+    const [newUserYearly, setNewUserYearly] = useState([]);
+    const [transactionYearly, setTransactionYearly] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const fetchApi = async () => {
@@ -137,10 +86,37 @@ export default memo(function Chart() {
         });
 
         setRevenueYearly(revenue);
-        console.log(revenueYearly);
 
         const usersRes = await services.getUserList();
-        let userList = usersRes.data;
+        let usersChartData = [];
+
+        for (let month = 0; month < 12; month++) {
+            let count = 0;
+            usersRes.data.forEach((data) => {
+                let createdAt = new Date(data.createdAt);
+                if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
+            });
+            usersChartData.push({
+                name: 'Tháng ' + Number(month + 1),
+                'Người dùng mới': count,
+            });
+        }
+        setNewUserYearly(usersChartData);
+
+        const transactionsRes = await services.getTransactionList();
+        let transactionsChartData = [];
+        for (let month = 0; month < 12; month++) {
+            let count = 0;
+            transactionsRes.data.forEach((data) => {
+                let createdAt = new Date(data.createdAt);
+                if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
+            });
+            transactionsChartData.push({
+                name: 'Tháng ' + Number(month + 1),
+                'Giao dịch mới': count,
+            });
+        }
+        setTransactionYearly(transactionsChartData);
 
         setLoading(false);
     };
@@ -196,18 +172,18 @@ export default memo(function Chart() {
                     </div>
                     <div className={cx('chart')}>
                         <ChartComponent
-                            data={newUserData}
+                            data={newUserYearly}
                             title={'Biểu đồ người dùng mới năm ' + currentYear.current}
                             grid
-                            dataKey="number"
+                            dataKey="Người dùng mới"
                         />
                     </div>
                     <div className={cx('chart')}>
                         <ChartComponent
-                            data={newTransactionData}
+                            data={transactionYearly}
                             title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
                             grid
-                            dataKey="number"
+                            dataKey="Giao dịch mới"
                         />
                     </div>
                 </div>
