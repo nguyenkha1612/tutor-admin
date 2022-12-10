@@ -23,9 +23,9 @@ function TransactionList() {
     };
 
     useEffect(() => {
+        console.log(transactionList);
         if (transactionList.length > 0) setData(transactionList);
         else fetchApi();
-        console.log(transactionList);
     }, []);
 
     const columns = [

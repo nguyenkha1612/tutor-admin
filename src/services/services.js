@@ -33,13 +33,13 @@ export const getUserInfo = async () => {
     }
 };
 
-export const getSubject = async () => {
-    return await instance.get('/v1/subjects/get-all');
-};
-
-export const getCourseList = async () => {
+export const getCourseList = async (currentPage) => {
     try {
-        const res = await instance.get('/v1/class-room/');
+        const res = await instance.get('/v1/class-room/', {
+            params: {
+                current_page: currentPage,
+            },
+        });
         return res.data;
     } catch (error) {
         console.log(error);
