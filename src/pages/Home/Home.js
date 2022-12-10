@@ -1,5 +1,5 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 import Chart from '~/components/Chart';
 import FeaturedInfo from '~/components/FeatureInfo';
@@ -18,10 +18,10 @@ export default memo(function Home() {
     const [featureData, setFeatureData] = useState([]);
     const [userList, setUserList] = useState([]);
     const [transactionList, setTransactionList] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const loading = useRef(false);
 
     useEffect(() => {
-        setLoading(true);
+        loading.current = true;
         let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
 
         let currentDate = new Date();
@@ -109,6 +109,7 @@ export default memo(function Home() {
             );
 
             setFeatureData(feature);
+            loading.current = false;
         };
 
         const fetchApiRecentlyUser = async () => {
@@ -123,14 +124,13 @@ export default memo(function Home() {
             );
         };
 
-        fetchApiFeatureInfo();
         fetchApiRecentlyUser();
-        setLoading(false);
+        fetchApiFeatureInfo();
     }, []);
 
     return (
         <LoadingOverlay
-            active={loading}
+            active={loading.current}
             spinner
             text="Loading..."
             className={cx('overlay')}
@@ -149,7 +149,7 @@ export default memo(function Home() {
                 }),
             }}
         >
-            <div style={loading ? { display: 'none' } : { display: 'block' }}>
+            <div style={loading.current ? { display: 'none' } : { display: 'block' }}>
                 <div className={cx('homeWrapper')}>
                     <FeaturedInfo data={featureData} />
                     <Chart data={revenueYearly} title="Phân tích doanh thu" grid dataKey="Doanh thu" />

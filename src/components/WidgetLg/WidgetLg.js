@@ -33,12 +33,14 @@ function WidgetLg({ data }) {
                                         <span className={cx('widgetLgName')}>{transaction.user.name}</span>
                                     </Link>
                                 </td>
-                                <td className={cx('widgetLgDate')}>{handleDate(new Date(transaction.createdAt))}</td>
+                                <td className={cx('widgetLgDate')}>{handleDate(transaction.createdAt)}</td>
                                 <td className={cx('widgetLgAmount')}>
                                     {transaction.amount} {transaction.currencyCode}
                                 </td>
                                 <td className={cx('widgetLgStatus')}>
-                                    <Button type={transaction.status} />
+                                    <Link to={'/transaction/' + transaction.id} className={cx('widgetLgUser')}>
+                                        <Button type={transaction.status} />
+                                    </Link>
                                 </td>
                             </tr>
                         );

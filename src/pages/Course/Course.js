@@ -104,7 +104,7 @@ export default memo(function Course() {
                             <div className={cx('courseShowInfo')}>
                                 <CalendarToday className={cx('courseShowIcon')} />
                                 <span className={cx('courseShowInfoTitle')}>
-                                    Thời gian dạy: {handleDate(new Date(data.classRequirement.dateStart))}
+                                    Thời gian dạy: {handleDate(data.classRequirement.dateStart)}
                                 </span>
                             </div>
                         ) : (
@@ -114,7 +114,7 @@ export default memo(function Course() {
                             <div className={cx('courseShowInfo')}>
                                 <CalendarToday className={cx('courseShowIcon')} />
                                 <span className={cx('courseShowInfoTitle')}>
-                                    Thời gian dạy: {handleDate(new Date(data.classRequirement.dateStart))}
+                                    Thời gian dạy: {handleDate(data.classRequirement.dateStart)}
                                 </span>
                             </div>
                         ) : (
@@ -177,7 +177,7 @@ export default memo(function Course() {
                             <div className={cx('courseShowInfo')}>
                                 <CalendarToday className={cx('courseShowIcon')} />
                                 <span className={cx('courseShowInfoTitle')}>
-                                    Ngày sinh: {handleDate(new Date(data.createdBy.birthday))}
+                                    Ngày sinh: {handleDate(data.createdBy.birthday)}
                                 </span>
                             </div>
                         ) : (

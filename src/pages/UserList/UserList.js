@@ -1,143 +1,78 @@
-import { memo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DeleteOutline } from '@mui/icons-material';
 import className from 'classnames/bind';
+import { memo, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
+import LoadingOverlay from 'react-loading-overlay-ts';
 import DataGrid from '~/components/DataGrid';
+import * as services from '~/services/services';
+import { handleDate } from '~/utils/commonFunc';
 import styles from './UserList.module.scss';
 
 const cx = className.bind(styles);
 
-const userRows = [
-    {
-        id: 1,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 2,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 3,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 4,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 5,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 6,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 7,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 8,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 9,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-    {
-        id: 10,
-        username: 'Jon Snow',
-        avatar: 'https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
-        email: 'jon@gmail.com',
-        status: 'active',
-        transaction: '$120.00',
-    },
-];
-
 export default memo(function UserList() {
-    const [data, setData] = useState(userRows);
+    const location = useLocation();
+    const { userList } = location.state;
 
-    const handleDelete = (id) => {
-        setData(data.filter((item) => item.id !== id));
+    const [data, setData] = useState([]);
+
+    const fetchApi = async (page) => {
+        const res = await services.getUserList(page);
+        console.log(res.data);
+        setData((prev) => [...prev, ...res.data]);
     };
 
+    useEffect(() => {
+        console.log(userList);
+        if (userList !== null && userList.length > 0) setData(userList);
+        else fetchApi();
+    }, []);
+
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 0.5 },
+        { field: 'id', headerName: 'ID', flex: 0.5, headerAlign: 'center', align: 'center' },
         {
             field: 'user',
             headerName: 'Người dùng',
-            flex: 2.5,
+            flex: 2,
+            headerAlign: 'center',
             renderCell: (params) => {
                 return (
                     <div className={cx('userListUser')}>
-                        <img className={cx('userListImg')} src={params.row.avatar} alt="" />
-                        {params.row.username}
+                        <img className={cx('userListImg')} src={params.row.urlAvt} alt="avatar" />
+                        {params.row.username || 'user03' + params.row.id}
                     </div>
                 );
             },
         },
-        { field: 'email', headerName: 'Email', flex: 2.5 },
         {
-            field: 'status',
-            headerName: 'Trạng thái',
-            flex: 1,
+            field: 'name',
+            headerName: 'Họ tên',
+            headerAlign: 'center',
+            flex: 2,
         },
+        { field: 'email', headerName: 'Email', flex: 2, headerAlign: 'center' },
         {
-            field: 'transaction',
-            headerName: 'Tổng giao dịch',
-            flex: 1,
+            field: 'createdAt',
+            headerName: 'Ngày tạo',
+            flex: 2,
+            headerAlign: 'center',
+            align: 'center',
+            renderCell: (params) => {
+                return <>{handleDate(params.row.createdAt)}</>;
+            },
         },
         {
             field: 'action',
             headerName: 'Chỉnh sửa',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => {
                 return (
                     <>
                         <Link to={'/user/' + params.row.id}>
-                            <button className={cx('dataGridEditBtn')}>Edit</button>
+                            <button className={cx('dataGridEditBtn')}>View</button>
                         </Link>
-                        <DeleteOutline
-                            className={cx('dataGridDeleteBtn')}
-                            onClick={() => handleDelete(params.row.id)}
-                        />
                     </>
                 );
             },
@@ -145,8 +80,27 @@ export default memo(function UserList() {
     ];
 
     return (
-        <div className={cx('userList')}>
-            <DataGrid rows={data} disableSelectionOnClick columns={columns} checkboxSelection />
-        </div>
+        <LoadingOverlay
+            active={data.length === 0}
+            spinner
+            text="Loading..."
+            className={cx('userList')}
+            styles={{
+                overlay: (base) => ({
+                    ...base,
+                    background: 'white',
+                    color: 'black',
+                }),
+                spinner: (base) => ({
+                    ...base,
+                    width: '65px',
+                    '& svg circle': {
+                        stroke: 'black',
+                    },
+                }),
+            }}
+        >
+            <DataGrid rows={data} disableSelectionOnClick columns={columns} />
+        </LoadingOverlay>
     );
 });

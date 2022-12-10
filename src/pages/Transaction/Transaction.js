@@ -15,7 +15,7 @@ import className from 'classnames/bind';
 
 import { memo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { handleDate, handleDateTime, handleLevel, upperCaseFirstLetter } from '~/utils/commonFunc';
+import { handleDate, handleDateTime, handleLevel } from '~/utils/commonFunc';
 import styles from './Transaction.module.scss';
 const cx = className.bind(styles);
 
@@ -33,69 +33,67 @@ export default memo(function Transaction() {
             <div className={cx('transactionContainer')}>
                 <div className={cx('transactionShow')}>
                     <div className={cx('transactionShowTop')}>
-                        <img src={data.userInfo.urlAvt} alt="avatar" className={cx('userShowImg')} />
+                        <img src={data.user.urlAvt} alt="avatar" className={cx('userShowImg')} />
                         <div className={cx('userShowTopTitle')}>
-                            <span className={cx('userShowUserName')}>{data.userInfo.name}</span>
+                            <span className={cx('userShowUserName')}>{data.user.name}</span>
                             {/* <span className={cx('userShowUserTitle')}>
-                                {upperCaseFirstLetter(data.userInfo.roles[0].roleName)}
+                                {upperCaseFirstLetter(data.user.roles[0].roleName)}
                             </span> */}
                         </div>
                     </div>
                     <div className={cx('transactionShowBottom')}>
                         <span className={cx('transactionShowTitle')}>Chi tiết tài khoản</span>
-                        {data.userInfo.userName ? (
+                        {data.user.userName ? (
                             <div className={cx('transactionShowInfo')}>
                                 <PermIdentity className={cx('transactionShowIcon')} />
                                 <span className={cx('transactionShowInfoTitle')}>
-                                    Tên tài khoản: {data.userInfo.userName}
+                                    Tên tài khoản: {data.user.userName}
                                 </span>
                             </div>
                         ) : (
                             <></>
                         )}
-                        {data.userInfo.birthday ? (
+                        {data.user.birthday ? (
                             <div className={cx('transactionShowInfo')}>
                                 <CalendarToday className={cx('transactionShowIcon')} />
                                 <span className={cx('transactionShowInfoTitle')}>
-                                    Ngày sinh: {handleDate(new Date(data.userInfo.birthday))}
+                                    Ngày sinh: {handleDate(data.user.birthday)}
                                 </span>
                             </div>
                         ) : (
                             <></>
                         )}
-                        {data.userInfo.phone ? (
+                        {data.user.phone ? (
                             <div className={cx('transactionShowInfo')}>
                                 <PhoneAndroid className={cx('transactionShowIcon')} />
-                                <span className={cx('transactionShowInfoTitle')}>
-                                    Số điện thoại: {data.userInfo.phone}
-                                </span>
+                                <span className={cx('transactionShowInfoTitle')}>Số điện thoại: {data.user.phone}</span>
                             </div>
                         ) : (
                             <></>
                         )}
-                        {data.userInfo.email ? (
+                        {data.user.email ? (
                             <div className={cx('transactionShowInfo')}>
                                 <MailOutline className={cx('transactionShowIcon')} />
-                                <span className={cx('transactionShowInfoTitle')}>Email: {data.userInfo.email}</span>
+                                <span className={cx('transactionShowInfoTitle')}>Email: {data.user.email}</span>
                             </div>
                         ) : (
                             <></>
                         )}
-                        {data.userInfo.level ? (
+                        {data.user.level ? (
                             <div className={cx('transactionShowInfo')}>
                                 <WorkspacePremiumOutlined className={cx('transactionShowIcon')} />
                                 <span className={cx('transactionShowInfoTitle')}>
-                                    Cấp bậc: {handleLevel(data.userInfo.level)}
+                                    Cấp bậc: {handleLevel(data.user.level)}
                                 </span>
                             </div>
                         ) : (
                             <></>
                         )}
-                        {data.userInfo.addresses[0] && data.userInfo.addresses[0].fullAddress !== 'string' ? (
+                        {data.user.addresses[0] && data.user.addresses[0].fullAddress !== 'string' ? (
                             <div className={cx('transactionShowInfo')}>
                                 <LocationOnOutlined className={cx('transactionShowIcon')} />
                                 <span className={cx('transactionShowInfoTitle')}>
-                                    Địa chỉ: {data.userInfo.addresses[0].fullAddress}
+                                    Địa chỉ: {data.user.addresses[0].fullAddress}
                                 </span>
                             </div>
                         ) : (

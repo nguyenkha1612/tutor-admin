@@ -5,59 +5,9 @@ import LoadingOverlay from 'react-loading-overlay-ts';
 import ChartComponent from '~/components/Chart';
 import * as services from '~/services/services';
 import styles from './Chart.module.scss';
+import { PieChart } from 'react-minimal-pie-chart';
 
 const cx = className.bind(styles);
-
-const newTransactionData = [
-    {
-        name: 'Jan',
-        number: 520,
-    },
-    {
-        name: 'Feb',
-        number: 348,
-    },
-    {
-        name: 'Mar',
-        number: 775,
-    },
-    {
-        name: 'Apr',
-        number: 652,
-    },
-    {
-        name: 'May',
-        number: 490,
-    },
-    {
-        name: 'Jun',
-        number: 800,
-    },
-    {
-        name: 'Jul',
-        number: 753,
-    },
-    {
-        name: 'Agu',
-        number: 986,
-    },
-    {
-        name: 'Sep',
-        number: 1201,
-    },
-    {
-        name: 'Oct',
-        number: 1042,
-    },
-    {
-        name: 'Nov',
-        number: 862,
-    },
-    {
-        name: 'Dec',
-        number: 654,
-    },
-];
 
 const options = [
     { label: new Date().getFullYear(), value: new Date().getFullYear() },
@@ -77,7 +27,6 @@ export default memo(function Chart() {
         let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
         const revenueRes = await services.getRevenueYearly(currentYear.current);
         let revenue = [];
-
         await revenueRes.data.forEach((data) => {
             revenue.push({
                 name: 'Tháng ' + data.month,
@@ -163,28 +112,74 @@ export default memo(function Chart() {
             >
                 <div style={loading ? { display: 'none' } : { display: 'block' }}>
                     <div className={cx('chart')}>
-                        <ChartComponent
-                            data={revenueYearly}
-                            title={'Biểu đồ doanh thu năm ' + currentYear.current}
-                            grid
-                            dataKey="Doanh thu"
-                        />
+                        <div className={cx('rechart')}>
+                            <ChartComponent
+                                data={revenueYearly}
+                                title={'Biểu đồ doanh thu năm ' + currentYear.current}
+                                grid
+                                dataKey="Doanh thu"
+                            />
+                        </div>
+                        <div className={cx('circle-chart')}>
+                            <PieChart
+                                data={[
+                                    { title: 'Mở lớp học', value: 1100000, color: '#FFCCB6', label: '55%' },
+                                    { title: 'Quảng cáo', value: 500000, color: '#FFFFB5', label: '25%' },
+                                    { title: 'Khác', value: 400000, color: '#ECD5E3', label: '20%' },
+                                ]}
+                                radius={30}
+                                label={({ dataEntry }) => dataEntry.label}
+                                labelStyle={{ fontSize: '4px' }}
+                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                            />
+                        </div>
                     </div>
                     <div className={cx('chart')}>
-                        <ChartComponent
-                            data={newUserYearly}
-                            title={'Biểu đồ người dùng mới năm ' + currentYear.current}
-                            grid
-                            dataKey="Người dùng mới"
-                        />
+                        <div className={cx('rechart')}>
+                            <ChartComponent
+                                data={newUserYearly}
+                                title={'Biểu đồ người dùng mới năm ' + currentYear.current}
+                                grid
+                                dataKey="Người dùng mới"
+                            />
+                        </div>
+                        <div className={cx('circle-chart')}>
+                            <PieChart
+                                data={[
+                                    { title: 'Học sinh', value: 900, color: '#CCE2CB', label: '56%' },
+                                    { title: 'Gia sư', value: 500, color: '#8FCACA', label: '32%' },
+                                    { title: 'Khác', value: 200, color: '#97C1A9', label: '12%' },
+                                ]}
+                                radius={30}
+                                label={({ dataEntry }) => dataEntry.label}
+                                labelStyle={{ fontSize: '4px' }}
+                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                            />
+                        </div>
                     </div>
                     <div className={cx('chart')}>
-                        <ChartComponent
-                            data={transactionYearly}
-                            title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
-                            grid
-                            dataKey="Giao dịch mới"
-                        />
+                        <div className={cx('rechart')}>
+                            <ChartComponent
+                                data={transactionYearly}
+                                title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
+                                grid
+                                dataKey="Giao dịch mới"
+                            />
+                        </div>
+                        <div className={cx('circle-chart')}>
+                            <PieChart
+                                data={[
+                                    { title: 'Amazone Pay', value: 1200, color: '#D5AAFF', label: '30%' },
+                                    { title: 'Paypal', value: 1800, color: '#C5A3FF', label: '45%' },
+                                    { title: 'Google Pay', value: 600, color: '#B28DFF', label: '15%' },
+                                    { title: 'Khác', value: 400, color: '#ECD4FF', label: '10%' },
+                                ]}
+                                radius={30}
+                                label={({ dataEntry }) => dataEntry.label}
+                                labelStyle={{ fontSize: '4px' }}
+                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                            />
+                        </div>
                     </div>
                 </div>
             </LoadingOverlay>

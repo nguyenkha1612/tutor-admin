@@ -24,6 +24,8 @@ export const handleQuantity = (amount, delimiter = '.', currency = '') => {
 };
 
 export const handleDateTime = (date) => {
+    date = new Date(date);
+
     let result = '';
     if (date.getDay() === 0) result += 'Chủ nhật';
     else result += 'Thứ ' + Number(date.getDay() + 1);
@@ -48,6 +50,8 @@ export const handleDateTime = (date) => {
 };
 
 export const handleDate = (date) => {
+    date = new Date(date);
+
     let result = '';
     if (date.getDay() === 0) result += 'Chủ nhật';
     else result += 'Thứ ' + Number(date.getDay() + 1);
