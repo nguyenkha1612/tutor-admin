@@ -20,7 +20,7 @@ export default memo(function Chart() {
     const [revenueYearly, setRevenueYearly] = useState([]);
     const [newUserYearly, setNewUserYearly] = useState([]);
     const [transactionYearly, setTransactionYearly] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const fetchApi = async () => {
         setLoading(true);
@@ -81,15 +81,6 @@ export default memo(function Chart() {
 
     return (
         <div className={cx('chartWrapper')}>
-            <div className={cx('chart')}>
-                <select value={currentYear.current} onChange={handleChangeYear} className={cx('select-year')}>
-                    {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-            </div>
             <LoadingOverlay
                 active={loading}
                 spinner
@@ -110,78 +101,95 @@ export default memo(function Chart() {
                     }),
                 }}
             >
-                <div style={loading ? { display: 'none' } : { display: 'block' }}>
-                    <div className={cx('chart')}>
-                        <div className={cx('rechart')}>
-                            <ChartComponent
-                                data={revenueYearly}
-                                title={'Biểu đồ doanh thu năm ' + currentYear.current}
-                                grid
-                                dataKey="Doanh thu"
-                            />
+                {!loading ? (
+                    <>
+                        <div className={cx('chart')}>
+                            <select
+                                value={currentYear.current}
+                                onChange={handleChangeYear}
+                                className={cx('select-year')}
+                            >
+                                {options.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        <div className={cx('circle-chart')}>
-                            <PieChart
-                                data={[
-                                    { title: 'Mở lớp học', value: 1100000, color: '#FFCCB6', label: '55%' },
-                                    { title: 'Quảng cáo', value: 500000, color: '#FFFFB5', label: '25%' },
-                                    { title: 'Khác', value: 400000, color: '#ECD5E3', label: '20%' },
-                                ]}
-                                radius={30}
-                                label={({ dataEntry }) => dataEntry.label}
-                                labelStyle={{ fontSize: '4px' }}
-                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
-                            />
+                        <div className={cx('chart')}>
+                            <div className={cx('rechart')}>
+                                <ChartComponent
+                                    data={revenueYearly}
+                                    title={'Biểu đồ doanh thu năm ' + currentYear.current}
+                                    grid
+                                    dataKey="Doanh thu"
+                                />
+                            </div>
+                            <div className={cx('circle-chart')}>
+                                <PieChart
+                                    data={[
+                                        { title: 'Mở lớp học', value: 1100000, color: '#FFCCB6', label: '55%' },
+                                        { title: 'Quảng cáo', value: 500000, color: '#FFFFB5', label: '25%' },
+                                        { title: 'Khác', value: 400000, color: '#ECD5E3', label: '20%' },
+                                    ]}
+                                    radius={30}
+                                    label={({ dataEntry }) => dataEntry.label}
+                                    labelStyle={{ fontSize: '4px' }}
+                                    segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className={cx('chart')}>
-                        <div className={cx('rechart')}>
-                            <ChartComponent
-                                data={newUserYearly}
-                                title={'Biểu đồ người dùng mới năm ' + currentYear.current}
-                                grid
-                                dataKey="Người dùng mới"
-                            />
+                        <div className={cx('chart')}>
+                            <div className={cx('rechart')}>
+                                <ChartComponent
+                                    data={newUserYearly}
+                                    title={'Biểu đồ người dùng mới năm ' + currentYear.current}
+                                    grid
+                                    dataKey="Người dùng mới"
+                                />
+                            </div>
+                            <div className={cx('circle-chart')}>
+                                <PieChart
+                                    data={[
+                                        { title: 'Học sinh', value: 900, color: '#CCE2CB', label: '56%' },
+                                        { title: 'Gia sư', value: 500, color: '#8FCACA', label: '32%' },
+                                        { title: 'Khác', value: 200, color: '#97C1A9', label: '12%' },
+                                    ]}
+                                    radius={30}
+                                    label={({ dataEntry }) => dataEntry.label}
+                                    labelStyle={{ fontSize: '4px' }}
+                                    segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                                />
+                            </div>
                         </div>
-                        <div className={cx('circle-chart')}>
-                            <PieChart
-                                data={[
-                                    { title: 'Học sinh', value: 900, color: '#CCE2CB', label: '56%' },
-                                    { title: 'Gia sư', value: 500, color: '#8FCACA', label: '32%' },
-                                    { title: 'Khác', value: 200, color: '#97C1A9', label: '12%' },
-                                ]}
-                                radius={30}
-                                label={({ dataEntry }) => dataEntry.label}
-                                labelStyle={{ fontSize: '4px' }}
-                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
-                            />
+                        <div className={cx('chart')}>
+                            <div className={cx('rechart')}>
+                                <ChartComponent
+                                    data={transactionYearly}
+                                    title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
+                                    grid
+                                    dataKey="Giao dịch mới"
+                                />
+                            </div>
+                            <div className={cx('circle-chart')}>
+                                <PieChart
+                                    data={[
+                                        { title: 'Amazone Pay', value: 1200, color: '#D5AAFF', label: '30%' },
+                                        { title: 'Paypal', value: 1800, color: '#C5A3FF', label: '45%' },
+                                        { title: 'Google Pay', value: 600, color: '#B28DFF', label: '15%' },
+                                        { title: 'Khác', value: 400, color: '#ECD4FF', label: '10%' },
+                                    ]}
+                                    radius={30}
+                                    label={({ dataEntry }) => dataEntry.label}
+                                    labelStyle={{ fontSize: '4px' }}
+                                    segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className={cx('chart')}>
-                        <div className={cx('rechart')}>
-                            <ChartComponent
-                                data={transactionYearly}
-                                title={'Biểu đồ số lượt giao dịch năm ' + currentYear.current}
-                                grid
-                                dataKey="Giao dịch mới"
-                            />
-                        </div>
-                        <div className={cx('circle-chart')}>
-                            <PieChart
-                                data={[
-                                    { title: 'Amazone Pay', value: 1200, color: '#D5AAFF', label: '30%' },
-                                    { title: 'Paypal', value: 1800, color: '#C5A3FF', label: '45%' },
-                                    { title: 'Google Pay', value: 600, color: '#B28DFF', label: '15%' },
-                                    { title: 'Khác', value: 400, color: '#ECD4FF', label: '10%' },
-                                ]}
-                                radius={30}
-                                label={({ dataEntry }) => dataEntry.label}
-                                labelStyle={{ fontSize: '4px' }}
-                                segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
-                            />
-                        </div>
-                    </div>
-                </div>
+                    </>
+                ) : (
+                    <></>
+                )}
             </LoadingOverlay>
         </div>
     );

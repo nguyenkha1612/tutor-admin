@@ -13,15 +13,17 @@ import LoadingOverlay from 'react-loading-overlay-ts';
 
 const cx = className.bind(styles);
 
+const widgetLgCol = ['Khách hàng', 'Ngày giao dịch', 'Số tiền', 'Trạng thái'];
+
 export default memo(function Home() {
     const [revenueYearly, setRevenueYearly] = useState([]);
     const [featureData, setFeatureData] = useState([]);
     const [userList, setUserList] = useState([]);
     const [transactionList, setTransactionList] = useState([]);
-    const loading = useRef(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        loading.current = true;
+        setLoading(true);
         let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
 
         let currentDate = new Date();
@@ -109,7 +111,7 @@ export default memo(function Home() {
             );
 
             setFeatureData(feature);
-            loading.current = false;
+            setLoading(false);
         };
 
         const fetchApiRecentlyUser = async () => {
@@ -130,7 +132,7 @@ export default memo(function Home() {
 
     return (
         <LoadingOverlay
-            active={loading.current}
+            active={loading}
             spinner
             text="Loading..."
             className={cx('overlay')}
@@ -149,16 +151,18 @@ export default memo(function Home() {
                 }),
             }}
         >
-            <div style={loading.current ? { display: 'none' } : { display: 'block' }}>
+            {!loading ? (
                 <div className={cx('homeWrapper')}>
                     <FeaturedInfo data={featureData} />
                     <Chart data={revenueYearly} title="Phân tích doanh thu" grid dataKey="Doanh thu" />
                     <div className={cx('homeWidgets')}>
                         <WidgetSm data={userList} />
-                        <WidgetLg data={transactionList} />
+                        <WidgetLg title={'Giao dịch gần nhất'} data={transactionList} col={widgetLgCol} />
                     </div>
                 </div>
-            </div>
+            ) : (
+                <></>
+            )}
         </LoadingOverlay>
     );
 });
