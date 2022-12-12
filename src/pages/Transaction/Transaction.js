@@ -14,8 +14,8 @@ import {
 import className from 'classnames/bind';
 
 import { memo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { handleDate, handleDateTime, handleLevel } from '~/utils/commonFunc';
+import { Link, useLocation } from 'react-router-dom';
+import { handleDate, handleDateTime, handleLevel, handleTypeTransaction } from '~/utils/commonFunc';
 import styles from './Transaction.module.scss';
 const cx = className.bind(styles);
 
@@ -32,15 +32,13 @@ export default memo(function Transaction() {
             </div>
             <div className={cx('transactionContainer')}>
                 <div className={cx('transactionShow')}>
-                    <div className={cx('transactionShowTop')}>
+                    <Link to={`/user/${data.user.id}`} className={cx('transactionShowTop')}>
                         <img src={data.user.urlAvt} alt="avatar" className={cx('userShowImg')} />
                         <div className={cx('userShowTopTitle')}>
                             <span className={cx('userShowUserName')}>{data.user.name}</span>
-                            {/* <span className={cx('userShowUserTitle')}>
-                                {upperCaseFirstLetter(data.user.roles[0].roleName)}
-                            </span> */}
+                            <span className={cx('userShowUserTitle')}>{data.user.username}</span>
                         </div>
-                    </div>
+                    </Link>
                     <div className={cx('transactionShowBottom')}>
                         <span className={cx('transactionShowTitle')}>Chi tiết tài khoản</span>
                         {data.user.userName ? (
@@ -159,7 +157,9 @@ export default memo(function Transaction() {
                         {data.type ? (
                             <div className={cx('transactionShowInfo')}>
                                 <TypeSpecimenOutlined className={cx('transactionShowIcon')} />
-                                <span className={cx('transactionShowInfoTitle')}>Loại giao dịch: {data.type}</span>
+                                <span className={cx('transactionShowInfoTitle')}>
+                                    Loại giao dịch: {handleTypeTransaction(data.type)}
+                                </span>
                             </div>
                         ) : (
                             <></>

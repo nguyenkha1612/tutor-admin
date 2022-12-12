@@ -1,15 +1,4 @@
-import {
-    AttachMoney,
-    ChatBubbleOutline,
-    DynamicFeed,
-    Home,
-    MailOutline,
-    PermIdentity,
-    Report,
-    School,
-    Timeline,
-    WorkOutline,
-} from '@mui/icons-material';
+import { AttachMoney, Home, PermIdentity, School, Timeline } from '@mui/icons-material';
 
 const dashboard = [
     {
@@ -52,52 +41,52 @@ const dashboard = [
             },
         ],
     },
-    {
-        title: 'Notifications',
-        list: [
-            {
-                link: '/mail',
-                active: false,
-                title: 'Mail',
-                icon: <MailOutline className={'sidebarIcon'} />,
-            },
-            {
-                link: '/feedback',
-                active: false,
-                title: 'Feedback',
-                icon: <DynamicFeed className={'sidebarIcon'} />,
-            },
-            {
-                link: '/messages',
-                active: false,
-                title: 'Messages',
-                icon: <ChatBubbleOutline className={'sidebarIcon'} />,
-            },
-        ],
-    },
-    {
-        title: 'Staff',
-        list: [
-            {
-                link: '/manage',
-                active: false,
-                title: 'Manage',
-                icon: <WorkOutline className={'sidebarIcon'} />,
-            },
-            {
-                link: '/analytics',
-                active: false,
-                title: 'Analytics',
-                icon: <Timeline className={'sidebarIcon'} />,
-            },
-            {
-                link: '/reports',
-                active: false,
-                title: 'Reports',
-                icon: <Report className={'sidebarIcon'} />,
-            },
-        ],
-    },
+    // {
+    //     title: 'Notifications',
+    //     list: [
+    //         {
+    //             link: '/mail',
+    //             active: false,
+    //             title: 'Mail',
+    //             icon: <MailOutline className={'sidebarIcon'} />,
+    //         },
+    //         {
+    //             link: '/feedback',
+    //             active: false,
+    //             title: 'Feedback',
+    //             icon: <DynamicFeed className={'sidebarIcon'} />,
+    //         },
+    //         {
+    //             link: '/messages',
+    //             active: false,
+    //             title: 'Messages',
+    //             icon: <ChatBubbleOutline className={'sidebarIcon'} />,
+    //         },
+    //     ],
+    // },
+    // {
+    //     title: 'Staff',
+    //     list: [
+    //         {
+    //             link: '/manage',
+    //             active: false,
+    //             title: 'Manage',
+    //             icon: <WorkOutline className={'sidebarIcon'} />,
+    //         },
+    //         {
+    //             link: '/analytics',
+    //             active: false,
+    //             title: 'Analytics',
+    //             icon: <Timeline className={'sidebarIcon'} />,
+    //         },
+    //         {
+    //             link: '/reports',
+    //             active: false,
+    //             title: 'Reports',
+    //             icon: <Report className={'sidebarIcon'} />,
+    //         },
+    //     ],
+    // },
 ];
 
 export default dashboard;

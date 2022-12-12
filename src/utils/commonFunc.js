@@ -82,3 +82,10 @@ export const handleLevel = (text) => {
     else if (text.toLowerCase() === 'teacher') return 'Giáo viên';
     else return 'Trống';
 };
+
+export const handleTypeTransaction = (text) => {
+    if (text.toLowerCase() === 'become_tutor') return 'Đăng ký làm gia sư';
+    else if (text.toLowerCase() === 'deposit') return 'Nạp tiền';
+    else if (text.toLowerCase() === 'create_class') return 'Tìm gia sư';
+    else return 'Trống';
+};

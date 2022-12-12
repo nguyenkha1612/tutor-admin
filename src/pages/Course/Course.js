@@ -154,65 +154,64 @@ export default memo(function Course() {
                         ) : (
                             <></>
                         )}
-
-                        <span className={cx('courseShowTitle')}>Thông tin người tạo</span>
-                        <Link to={'/user/' + data.createdBy.id} className={cx('userShowTop')}>
-                            <img src={data.createdBy.urlAvt} alt="avatar" className={cx('userShowImg')} />
-                            <div className={cx('userShowTopTitle')}>
-                                <span className={cx('userShowUserName')}>{data.createdBy.name}</span>
-                                {/* <span className={cx('userShowUserTitle')}>{data.createdBy.role}</span> */}
-                            </div>
-                        </Link>
-                        {data.createdBy.gender ? (
-                            <div className={cx('courseShowInfo')}>
-                                <MaleOutlined className={cx('courseShowIcon')} />
-                                <span className={cx('courseShowInfoTitle')}>
-                                    Giới tính: {handleGender(data.createdBy.gender)}
-                                </span>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                        {data.createdBy.birthday ? (
-                            <div className={cx('courseShowInfo')}>
-                                <CalendarToday className={cx('courseShowIcon')} />
-                                <span className={cx('courseShowInfoTitle')}>
-                                    Ngày sinh: {handleDate(data.createdBy.birthday)}
-                                </span>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                        {data.createdBy.phone ? (
-                            <div className={cx('courseShowInfo')}>
-                                <PhoneAndroid className={cx('courseShowIcon')} />
-                                <span className={cx('courseShowInfoTitle')}>Số điện thoại: {data.createdBy.phone}</span>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                        {data.createdBy.email ? (
-                            <div className={cx('courseShowInfo')}>
-                                <MailOutline className={cx('courseShowIcon')} />
-                                <span className={cx('courseShowInfoTitle')}>Email: {data.createdBy.email}</span>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                        {data.createdBy.addresses[0] ? (
-                            <div className={cx('courseShowInfo')}>
-                                <LocationOnOutlined className={cx('courseShowIcon')} />
-                                <span className={cx('courseShowInfoTitle')}>
-                                    Địa chỉ: {data.createdBy.addresses[0].fullAddress}
-                                </span>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
                     </div>
                 </div>
                 <div className={cx('courseUpdate')}>
-                    <span className={cx('courseUpdateTitle')}>Chỉnh sửa</span>
+                    <span className={cx('courseShowTitle')}>Thông tin người tạo</span>
+                    <Link to={'/user/' + data.createdBy.id} className={cx('userShowTop')}>
+                        <img src={data.createdBy.urlAvt} alt="avatar" className={cx('userShowImg')} />
+                        <div className={cx('userShowTopTitle')}>
+                            <span className={cx('userShowUserName')}>{data.createdBy.name}</span>
+                            {/* <span className={cx('userShowUserTitle')}>{data.createdBy.role}</span> */}
+                        </div>
+                    </Link>
+                    {data.createdBy.gender ? (
+                        <div className={cx('courseShowInfo')}>
+                            <MaleOutlined className={cx('courseShowIcon')} />
+                            <span className={cx('courseShowInfoTitle')}>
+                                Giới tính: {handleGender(data.createdBy.gender)}
+                            </span>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {data.createdBy.birthday ? (
+                        <div className={cx('courseShowInfo')}>
+                            <CalendarToday className={cx('courseShowIcon')} />
+                            <span className={cx('courseShowInfoTitle')}>
+                                Ngày sinh: {handleDate(data.createdBy.birthday)}
+                            </span>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {data.createdBy.phone ? (
+                        <div className={cx('courseShowInfo')}>
+                            <PhoneAndroid className={cx('courseShowIcon')} />
+                            <span className={cx('courseShowInfoTitle')}>Số điện thoại: {data.createdBy.phone}</span>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {data.createdBy.email ? (
+                        <div className={cx('courseShowInfo')}>
+                            <MailOutline className={cx('courseShowIcon')} />
+                            <span className={cx('courseShowInfoTitle')}>Email: {data.createdBy.email}</span>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {data.createdBy.addresses[0] ? (
+                        <div className={cx('courseShowInfo')}>
+                            <LocationOnOutlined className={cx('courseShowIcon')} />
+                            <span className={cx('courseShowInfoTitle')}>
+                                Địa chỉ: {data.createdBy.addresses[0].fullAddress}
+                            </span>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {/* <span className={cx('courseUpdateTitle')}>Chỉnh sửa</span>
                     <form className={cx('courseUpdateForm')}>
                         <div className={cx('courseUpdateLeft')}>
                             <div className={cx('courseUpdateItem')}>
@@ -243,7 +242,7 @@ export default memo(function Course() {
                                 <button className={cx('courseUpdateButton')}>Update</button>
                             </div>
                         </div>
-                    </form>
+                    </form> */}
                 </div>
             </div>
             <div className={cx('transactionsContainer')}>{/* <WidgetLg /> */}</div>
