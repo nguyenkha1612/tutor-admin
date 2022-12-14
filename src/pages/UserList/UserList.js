@@ -12,8 +12,6 @@ const cx = className.bind(styles);
 
 export default memo(function UserList() {
     const location = useLocation();
-    const { userList } = location.state;
-
     const [data, setData] = useState([]);
 
     const fetchApi = async (page) => {
@@ -23,8 +21,7 @@ export default memo(function UserList() {
     };
 
     useEffect(() => {
-        console.log(userList);
-        if (userList !== null && userList.length > 0) setData(userList);
+        if (location.state?.userList) setData(location.state.userList);
         else fetchApi();
     }, []);
 

@@ -10,10 +10,8 @@ const cx = className.bind(styles);
 
 function CourseList() {
     const location = useLocation();
-    const { courseList } = location.state;
-    // const currentPage = useRef(1);
-
     const [data, setData] = useState([]);
+    // const currentPage = useRef(1);
 
     const fetchApi = async (page) => {
         const res = await services.getCourseList(page);
@@ -21,8 +19,7 @@ function CourseList() {
     };
 
     useEffect(() => {
-        console.log(courseList);
-        if (courseList.length > 0) setData(courseList);
+        if (location.state?.courseList) setData(location.state.courseList);
         else fetchApi();
     }, []);
 

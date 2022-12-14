@@ -12,9 +12,7 @@ const cx = className.bind(styles);
 
 function TransactionList() {
     const location = useLocation();
-    const { transactionList } = location.state;
     const currentPage = useRef(1);
-
     const [data, setData] = useState([]);
 
     const fetchApi = async (page) => {
@@ -23,8 +21,7 @@ function TransactionList() {
     };
 
     useEffect(() => {
-        console.log(transactionList);
-        if (transactionList.length > 0) setData(transactionList);
+        if (location.state?.transactionList) setData(location.state.transactionList);
         else fetchApi();
     }, []);
 
