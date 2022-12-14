@@ -1,27 +1,19 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
-import * as services from '~/services/services';
 import { handleQuantity } from '~/utils/commonFunc';
 import styles from './CourseList.module.scss';
+
 const cx = className.bind(styles);
 
-function CourseList() {
-    const location = useLocation();
+function CourseList({ courseListData = [] }) {
     const [data, setData] = useState([]);
-    // const currentPage = useRef(1);
-
-    const fetchApi = async (page) => {
-        const res = await services.getCourseList(page);
-        setData((prev) => [...prev, ...res.data.data]);
-    };
 
     useEffect(() => {
-        if (location.state?.courseList) setData(location.state.courseList);
-        else fetchApi();
-    }, []);
+        if (courseListData.length > 0) setData(courseListData);
+    }, [courseListData]);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.35, headerAlign: 'center', align: 'center' },
@@ -58,7 +50,7 @@ function CourseList() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Link to={'/course/' + params.row.id} state={{ data: params.row }}>
+                        <Link to={'/course/' + params.row.id}>
                             <button className={cx('dataGridEditBtn')}>View</button>
                         </Link>
                     </>

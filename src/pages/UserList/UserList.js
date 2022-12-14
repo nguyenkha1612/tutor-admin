@@ -10,20 +10,16 @@ import styles from './UserList.module.scss';
 
 const cx = className.bind(styles);
 
-export default memo(function UserList() {
-    const location = useLocation();
+export default memo(function UserList({ userListData = [] }) {
     const [data, setData] = useState([]);
-
-    const fetchApi = async (page) => {
-        const res = await services.getUserList(page);
-        console.log(res.data);
-        setData((prev) => [...prev, ...res.data]);
-    };
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (location.state?.userList) setData(location.state.userList);
-        else fetchApi();
-    }, []);
+        if (userListData.length > 0) {
+            setData(userListData);
+            setLoading(false);
+        }
+    }, [userListData]);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5, headerAlign: 'center', align: 'center' },
@@ -78,7 +74,7 @@ export default memo(function UserList() {
 
     return (
         <LoadingOverlay
-            active={data.length === 0}
+            active={loading}
             spinner
             text="Loading..."
             className={cx('userList')}
@@ -97,7 +93,7 @@ export default memo(function UserList() {
                 }),
             }}
         >
-            <DataGrid rows={data} disableSelectionOnClick columns={columns} />
+            {!loading ? <DataGrid rows={data} disableSelectionOnClick columns={columns} /> : <></>}
         </LoadingOverlay>
     );
 });

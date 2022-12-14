@@ -35,11 +35,7 @@ function WidgetLg({ data, title, col, type }) {
                                     <td className={cx('widgetLgDate')}>{handleQuantity(item.tuition, '.', ' VNĐ')}</td>
                                     <td className={cx('widgetLgAmount')}>{item.status}</td>
                                     <td className={cx('widgetLgStatus')}>
-                                        <Link
-                                            to={'/course/' + item.id}
-                                            className={cx('widgetLgUser')}
-                                            state={{ data: item }}
-                                        >
+                                        <Link to={'/course/' + item.id} className={cx('widgetLgUser')}>
                                             <Button type={'Detail'} />
                                         </Link>
                                     </td>
@@ -64,11 +60,7 @@ function WidgetLg({ data, title, col, type }) {
                             return (
                                 <tr key={item.id} className={cx('widgetLgTr')}>
                                     <td>
-                                        <Link
-                                            to={'/transaction/' + item.id}
-                                            className={cx('widgetLgUser')}
-                                            state={{ data: item }}
-                                        >
+                                        <Link to={'/transaction/' + item.id} className={cx('widgetLgUser')}>
                                             <img src={item.user.urlAvt} alt="avatar" className={cx('widgetLgImg')} />
                                             <span className={cx('widgetLgName')}>{item.user.name}</span>
                                         </Link>
@@ -78,11 +70,7 @@ function WidgetLg({ data, title, col, type }) {
                                         {item.amount} {item.currencyCode}
                                     </td>
                                     <td className={cx('widgetLgStatus')}>
-                                        <Link
-                                            to={'/transaction/' + item.id}
-                                            className={cx('widgetLgUser')}
-                                            state={{ data: item }}
-                                        >
+                                        <Link to={'/transaction/' + item.id} className={cx('widgetLgUser')}>
                                             <Button type={item.status} />
                                         </Link>
                                     </td>

@@ -52,7 +52,8 @@
     }
 }
 
-.primary {
+.primary,
+.detail {
     background-color: var(--primary);
     color: var(--white);
     border-color: var(--primary);

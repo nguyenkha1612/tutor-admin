@@ -1,29 +1,30 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import DataGrid from '~/components/DataGrid';
+import { memo, useEffect, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
+import { Link } from 'react-router-dom';
+import DataGrid from '~/components/DataGrid';
 
-import * as services from '~/services/services';
 import { handleDateTime, handleQuantity } from '~/utils/commonFunc';
 import styles from './TransactionList.module.scss';
 
 const cx = className.bind(styles);
 
-function TransactionList() {
-    const location = useLocation();
-    const currentPage = useRef(1);
+function TransactionList({ transactionListData = [] }) {
+    // const currentPage = useRef(1);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const fetchApi = async (page) => {
-        const res = await services.getTransactionList(page);
-        setData((prev) => [...prev, ...res.data]);
-    };
+    // const fetchApi = async (page) => {
+    //     const res = await services.getTransactionList(page);
+    //     setData((prev) => [...prev, ...res.data]);
+    // };
 
     useEffect(() => {
-        if (location.state?.transactionList) setData(location.state.transactionList);
-        else fetchApi();
-    }, []);
+        if (transactionListData.length > 0) {
+            setData(transactionListData);
+            setLoading(false);
+        }
+    }, [transactionListData]);
 
     const columns = [
         {
@@ -101,12 +102,12 @@ function TransactionList() {
         },
     ];
 
-    const onPageChange = (e) => {
-        if (!(e < currentPage.current)) {
-            currentPage.current = e + 1;
-            fetchApi(currentPage.current);
-        }
-    };
+    // const onPageChange = (e) => {
+    //     if (!(e < currentPage.current)) {
+    //         currentPage.current = e + 1;
+    //         fetchApi(currentPage.current);
+    //     }
+    // };
 
     return (
         <LoadingOverlay
@@ -129,7 +130,16 @@ function TransactionList() {
                 }),
             }}
         >
-            <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
+            {!loading ? (
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    disableSelectionOnClick
+                    // onPageChange={(e) => onPageChange(e)}
+                />
+            ) : (
+                <></>
+            )}
         </LoadingOverlay>
     );
 }
