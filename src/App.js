@@ -14,7 +14,7 @@ function App() {
     const [courseListData, setCourseListData] = useState([]);
     const [userListData, setUserListData] = useState([]);
     const [revenueYearlyData, setRevenueYearlyData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -30,7 +30,7 @@ function App() {
 
             const revenueYearlyData = await services.getRevenueYearly(new Date().getFullYear());
             setRevenueYearlyData(revenueYearlyData.data);
-            setLoading(false);
+            // setLoading(false);
             console.log(revenueYearlyData.data);
         };
 
@@ -65,34 +65,9 @@ function App() {
     };
 
     return (
-        <LoadingOverlayWrapper
-            active={loading}
-            spinner
-            text="Loading..."
-            className={'overlay'}
-            styles={{
-                overlay: (base) => ({
-                    ...base,
-                    background: 'white',
-                    color: 'black',
-                }),
-                spinner: (base) => ({
-                    ...base,
-                    width: '65px',
-                    '& svg circle': {
-                        stroke: 'black',
-                    },
-                }),
-            }}
-        >
-            {!loading ? (
-                <Router>
-                    <Routes>{renderRoutes()}</Routes>
-                </Router>
-            ) : (
-                <></>
-            )}
-        </LoadingOverlayWrapper>
+        <Router>
+            <Routes>{renderRoutes()}</Routes>
+        </Router>
     );
 }
 

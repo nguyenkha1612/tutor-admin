@@ -74,18 +74,24 @@ export const upperCaseFirstLetter = (text) => {
 export const handleGender = (text) => {
     if (text.toLowerCase() === 'male') return 'Nam';
     else if (text.toLowerCase() === 'female') return 'Nữ';
-    else return 'Trống';
+    else return text;
 };
 
 export const handleLevel = (text) => {
     if (text.toLowerCase() === 'student') return 'Học sinh';
     else if (text.toLowerCase() === 'teacher') return 'Giáo viên';
-    else return 'Trống';
+    else return text;
 };
 
 export const handleTypeTransaction = (text) => {
     if (text.toLowerCase() === 'become_tutor') return 'Đăng ký làm gia sư';
     else if (text.toLowerCase() === 'deposit') return 'Nạp tiền';
     else if (text.toLowerCase() === 'create_class') return 'Tìm gia sư';
-    else return 'Trống';
+    else return text;
+};
+
+export const handleStatusCourse = (text) => {
+    if (text.toLowerCase() === 'create') return 'Mới tạo';
+    else if (text.toLowerCase() === 'teaching') return 'Đã nhận lớp';
+    else return text;
 };

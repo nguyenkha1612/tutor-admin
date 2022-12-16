@@ -4,7 +4,7 @@ import LoadingOverlay from 'react-loading-overlay-ts';
 import { Link } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 import * as services from '~/services/services';
-import { handleQuantity } from '~/utils/commonFunc';
+import { handleQuantity, handleStatusCourse } from '~/utils/commonFunc';
 import styles from './CourseList.module.scss';
 
 const cx = className.bind(styles);
@@ -53,6 +53,9 @@ function CourseList() {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
+            renderCell: (params) => {
+                return <>{handleStatusCourse(params.row.status)}</>;
+            },
         },
         {
             field: 'action',

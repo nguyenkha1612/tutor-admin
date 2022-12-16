@@ -21,7 +21,14 @@ import LoadingOverlay from 'react-loading-overlay-ts';
 import { Link, useParams } from 'react-router-dom';
 import * as services from '~/services/services';
 
-import { handleDate, handleDateTime, handleGender, handleLevel, handleQuantity } from '~/utils/commonFunc';
+import {
+    handleDate,
+    handleDateTime,
+    handleGender,
+    handleLevel,
+    handleQuantity,
+    handleStatusCourse,
+} from '~/utils/commonFunc';
 import styles from './Course.module.scss';
 
 const cx = className.bind(styles);
@@ -203,7 +210,9 @@ export default memo(function Course({ courseListData = [] }) {
                                 {data.status ? (
                                     <div className={cx('courseShowInfo')}>
                                         <InfoOutlined className={cx('courseShowIcon')} />
-                                        <span className={cx('courseShowInfoTitle')}>Trạng thái: {data.status}</span>
+                                        <span className={cx('courseShowInfoTitle')}>
+                                            Trạng thái: {handleStatusCourse(data.status)}
+                                        </span>
                                     </div>
                                 ) : (
                                     <></>
