@@ -14,6 +14,8 @@ import LoadingOverlay from 'react-loading-overlay-ts';
 import WidgetLg from '~/components/WidgetLg';
 import { handleDate, handleGender, handleLevel } from '~/utils/commonFunc';
 import styles from './User.module.scss';
+import * as services from '~/services/services';
+import { useParams } from 'react-router-dom';
 
 const cx = className.bind(styles);
 
@@ -25,37 +27,55 @@ const options = [
 const widgetTransactionCol = ['Khách hàng', 'Ngày giao dịch', 'Số tiền', 'Trạng thái'];
 const widgetCourseCol = ['Tiêu đề', 'Học phí', 'Trạng thái', 'Chi tiết'];
 
-export default memo(function User({ userListData = [], transactionListData = [], courseListData = [] }) {
+export default memo(function User({ userListData = [], transactionListData = [] }) {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const [transactions, setTransactions] = useState([]);
     const [courses, setCourses] = useState([]);
+    const { id } = useParams();
 
     useEffect(() => {
-        const handleData = () => {
-            let id = Number(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+        const fetchApiCourses = async () => {
+            const response = await services.getCourseListByUser(id);
+            setCourses(response.data.data);
+        };
+
+        const fetchApiTransactions = async () => {
+            const response = await services.getTransactionByUserId(id);
+            setTransactions(response.data);
+        };
+
+        const fetchApiUser = () => {
+            let isFound = false;
             userListData.forEach((user) => {
-                if (user.id === id) setUser(user);
+                if (user.id === id) {
+                    setUser(user);
+                    isFound = true;
+                    setLoading(false);
+                }
             });
+
+            if (!isFound) {
+                const fetchApi = async (id) => {
+                    const response = await services.getUserById(id);
+                    console.log(response.data);
+                    setUser(response.data);
+                    setLoading(false);
+                };
+                fetchApi(id);
+            }
 
             setTransactions(
                 transactionListData.filter((transaction) => {
                     return transaction.user.id === id;
                 }),
             );
-
-            setCourses(
-                courseListData.filter((course) => {
-                    return course.createdBy.id === id;
-                }),
-            );
         };
 
-        if (userListData.length > 0 && transactionListData.length > 0 && courseListData.length > 0) {
-            handleData();
-            setLoading(false);
-        }
-    }, [userListData, transactionListData, courseListData]);
+        fetchApiUser();
+        fetchApiCourses();
+        fetchApiTransactions();
+    }, [id]);
 
     return (
         <LoadingOverlay
@@ -199,12 +219,20 @@ export default memo(function User({ userListData = [], transactionListData = [],
                             </div>
                         </div>
                     </div>
-                    <div className={cx('transactionsContainer')}>
-                        <WidgetLg title={'Lớp học đã tạo'} data={courses} col={widgetCourseCol} type={'course'} />
-                    </div>
-                    <div className={cx('transactionsContainer')}>
-                        <WidgetLg title={'Giao dịch đã thực hiện'} data={transactions} col={widgetTransactionCol} />
-                    </div>
+                    {courses.length > 0 ? (
+                        <div className={cx('transactionsContainer')}>
+                            <WidgetLg title={'Lớp học đã tạo'} data={courses} col={widgetCourseCol} type={'course'} />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                    {transactions.length > 0 ? (
+                        <div className={cx('transactionsContainer')}>
+                            <WidgetLg title={'Giao dịch đã thực hiện'} data={transactions} col={widgetTransactionCol} />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ) : (
                 <></>

@@ -1,6 +1,6 @@
 import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import LoadingOverlay from 'react-loading-overlay-ts';
 import DataGrid from '~/components/DataGrid';
@@ -10,16 +10,26 @@ import styles from './UserList.module.scss';
 
 const cx = className.bind(styles);
 
-export default memo(function UserList({ userListData = [] }) {
+export default memo(function UserList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // useEffect(() => {
+    //     if (userListData.length > 0) {
+    //         setData(userListData);
+    //         setLoading(false);
+    //     }
+    // }, [userListData]);
+
+    const fetchApi = async () => {
+        const res = await services.getUserList();
+        setData((prev) => [...prev, ...res.data]);
+        setLoading(false);
+    };
+
     useEffect(() => {
-        if (userListData.length > 0) {
-            setData(userListData);
-            setLoading(false);
-        }
-    }, [userListData]);
+        fetchApi();
+    }, []);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5, headerAlign: 'center', align: 'center' },

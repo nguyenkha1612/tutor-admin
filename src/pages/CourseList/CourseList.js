@@ -1,19 +1,32 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
 import { Link } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
+import * as services from '~/services/services';
 import { handleQuantity } from '~/utils/commonFunc';
 import styles from './CourseList.module.scss';
 
 const cx = className.bind(styles);
 
-function CourseList({ courseListData = [] }) {
+function CourseList() {
+    const currentPage = useRef(1);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchApi = async (page) => {
+        const res = await services.getCourseList(page);
+        setData((prev) => [...prev, ...res.data.data]);
+        setLoading(false);
+    };
+
+    // useEffect(() => {
+    //     if (courseListData.length > 0) setData(courseListData);
+    // }, [courseListData]);
 
     useEffect(() => {
-        if (courseListData.length > 0) setData(courseListData);
-    }, [courseListData]);
+        fetchApi();
+    }, []);
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.35, headerAlign: 'center', align: 'center' },
@@ -59,16 +72,16 @@ function CourseList({ courseListData = [] }) {
         },
     ];
 
-    // const onPageChange = (e) => {
-    //     if (!(e < currentPage.current)) {
-    //         currentPage.current = e + 1;
-    //         fetchApi(currentPage.current);
-    //     }
-    // };
+    const onPageChange = (e) => {
+        if (!(e < currentPage.current)) {
+            currentPage.current = e + 1;
+            fetchApi(currentPage.current);
+        }
+    };
 
     return (
         <LoadingOverlay
-            active={data.length === 0}
+            active={loading}
             spinner
             text="Loading..."
             className={cx('courseList')}
@@ -87,12 +100,11 @@ function CourseList({ courseListData = [] }) {
                 }),
             }}
         >
-            <DataGrid
-                rows={data}
-                columns={columns}
-                disableSelectionOnClick
-                // onPageChange={(e) => onPageChange(e)}
-            />
+            {!loading ? (
+                <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
+            ) : (
+                <></>
+            )}
         </LoadingOverlay>
     );
 }

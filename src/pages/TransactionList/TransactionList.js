@@ -1,30 +1,34 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
 import { Link } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 
+import * as services from '~/services/services';
 import { handleDateTime, handleQuantity } from '~/utils/commonFunc';
 import styles from './TransactionList.module.scss';
 
 const cx = className.bind(styles);
 
-function TransactionList({ transactionListData = [] }) {
-    // const currentPage = useRef(1);
+function TransactionList() {
+    const currentPage = useRef(1);
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-    // const fetchApi = async (page) => {
-    //     const res = await services.getTransactionList(page);
-    //     setData((prev) => [...prev, ...res.data]);
-    // };
+    const fetchApi = async (page) => {
+        const res = await services.getTransactionList(page);
+        setData((prev) => [...prev, ...res.data]);
+    };
+
+    // useEffect(() => {
+    //     if (transactionListData.length > 0) {
+    //         setData(transactionListData);
+    //         setLoading(false);
+    //     }
+    // }, [transactionListData]);
 
     useEffect(() => {
-        if (transactionListData.length > 0) {
-            setData(transactionListData);
-            setLoading(false);
-        }
-    }, [transactionListData]);
+        fetchApi();
+    }, []);
 
     const columns = [
         {
@@ -102,12 +106,12 @@ function TransactionList({ transactionListData = [] }) {
         },
     ];
 
-    // const onPageChange = (e) => {
-    //     if (!(e < currentPage.current)) {
-    //         currentPage.current = e + 1;
-    //         fetchApi(currentPage.current);
-    //     }
-    // };
+    const onPageChange = (e) => {
+        if (!(e < currentPage.current)) {
+            currentPage.current = e + 1;
+            fetchApi(currentPage.current);
+        }
+    };
 
     return (
         <LoadingOverlay
@@ -130,13 +134,8 @@ function TransactionList({ transactionListData = [] }) {
                 }),
             }}
         >
-            {!loading ? (
-                <DataGrid
-                    rows={data}
-                    columns={columns}
-                    disableSelectionOnClick
-                    // onPageChange={(e) => onPageChange(e)}
-                />
+            {data.length > 0 ? (
+                <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
             ) : (
                 <></>
             )}

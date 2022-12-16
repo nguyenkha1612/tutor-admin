@@ -23,22 +23,22 @@ const NOTIFICATION_ITEMS = [
     {
         image: 'https://firebasestorage.googleapis.com/v0/b/tutor-website-52add.appspot.com/o/files%2F66?alt=media&token=5457cc2b-f788-4905-9abc-bd4acb019313',
         message: 'Người dùng nguyenkha1612 đã tạo một khoá học mới',
-        to: '/courses',
+        to: '/course/124',
     },
     {
         image: 'https://firebasestorage.googleapis.com/v0/b/tutor-website-52add.appspot.com/o/files%2F65?alt=media&token=64f7c397-a130-41b0-8502-52fe45f0e88d',
         message: 'Người dùng nguyenloc đã tạo một khoá học mới',
-        to: '/courses',
+        to: '/course/114',
     },
     {
         image: 'https://i.pinimg.com/736x/97/d0/f9/97d0f95b9060ba41c4ea6bd1ae47267f.jpg',
         message: 'Người dùng thaodao00 đã tạo một giao dịch mới',
-        to: '/transactions',
+        to: '/transaction/204',
     },
     {
         image: 'https://firebasestorage.googleapis.com/v0/b/tutor-website-52add.appspot.com/o/files%2F65?alt=media&token=64f7c397-a130-41b0-8502-52fe45f0e88d',
         message: 'Người dùng nguyenloc đã tạo một giao dịch mới',
-        to: '/transactions',
+        to: '/transaction/205',
     },
 ];
 

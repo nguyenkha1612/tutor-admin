@@ -46,6 +46,19 @@ export const getCourseList = async (currentPage) => {
     }
 };
 
+export const getCourseById = async (id) => {
+    try {
+        const res = await instance.get('/v1/class-room/', {
+            params: {
+                id: id,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getTransactionList = async (currentPage, maxResult) => {
     try {
         const res = await instance.get('/v1/payment/history-all', {
@@ -54,6 +67,15 @@ export const getTransactionList = async (currentPage, maxResult) => {
                 max_result: maxResult,
             },
         });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getTransactionById = async (id) => {
+    try {
+        const res = await instance.get(`/v1/payment/history/${id}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -72,6 +94,28 @@ export const getUserList = async () => {
 export const getUserById = async (id = '') => {
     try {
         const res = await instance.get('/v1/auths/user/' + id);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getCourseListByUser = async (id) => {
+    try {
+        const res = await instance.get('/v1/class-room/', {
+            params: {
+                user_id: id,
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getTransactionByUserId = async (id) => {
+    try {
+        const res = await instance.get(`/v1/payment/history/user/${id}`);
         return res.data;
     } catch (error) {
         console.log(error);

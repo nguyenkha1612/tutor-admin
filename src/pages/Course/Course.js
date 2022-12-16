@@ -8,6 +8,7 @@ import {
     MailOutline,
     MaleOutlined,
     PeopleAltOutlined,
+    PermIdentity,
     PhoneAndroid,
     School,
     Subject,
@@ -17,7 +18,8 @@ import {
 import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import * as services from '~/services/services';
 
 import { handleDate, handleDateTime, handleGender, handleLevel, handleQuantity } from '~/utils/commonFunc';
 import styles from './Course.module.scss';
@@ -27,17 +29,28 @@ const cx = className.bind(styles);
 export default memo(function Course({ courseListData = [] }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { id } = useParams();
 
     useEffect(() => {
-        const id = Number(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+        let isFound = false;
         if (courseListData.length > 0)
             courseListData.forEach((course) => {
                 if (course.id === id) {
                     setData(course);
                     setLoading(false);
+                    isFound = true;
                 }
             });
-    }, [courseListData]);
+        if (!isFound) {
+            const fetchApi = async (id) => {
+                const response = await services.getCourseById(id);
+                console.log(response.data.data.data[0]);
+                setData(response.data.data.data[0]);
+                setLoading(false);
+            };
+            fetchApi(id);
+        }
+    }, [id]);
 
     return (
         <LoadingOverlay
@@ -69,6 +82,14 @@ export default memo(function Course({ courseListData = [] }) {
                         <div className={cx('courseShow')}>
                             <div className={cx('courseShowBottom')}>
                                 <span className={cx('courseShowTitle')}>Thông tin khoá học</span>
+                                {data.id ? (
+                                    <div className={cx('courseShowInfo')}>
+                                        <PermIdentity className={cx('courseShowIcon')} />
+                                        <span className={cx('courseShowInfoTitle')}>ID: {data.id}</span>
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
                                 {data.title ? (
                                     <div className={cx('courseShowInfo')}>
                                         <Title className={cx('courseShowIcon')} />

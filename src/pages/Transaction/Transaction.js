@@ -15,25 +15,36 @@ import className from 'classnames/bind';
 
 import { memo, useEffect, useState } from 'react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { handleDate, handleDateTime, handleLevel, handleTypeTransaction } from '~/utils/commonFunc';
+import * as services from '~/services/services';
 import styles from './Transaction.module.scss';
 const cx = className.bind(styles);
 
 export default memo(function Transaction({ transactionListData = [] }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { id } = useParams();
 
     useEffect(() => {
-        const id = Number(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+        let isFound = false;
         if (transactionListData.length > 0)
             transactionListData.forEach((course) => {
                 if (course.id === id) {
                     setData(course);
                     setLoading(false);
+                    isFound = true;
                 }
             });
-    }, [transactionListData]);
+        if (!isFound) {
+            const fetchApi = async (id) => {
+                const response = await services.getTransactionById(id);
+                setData(response.data);
+                setLoading(false);
+            };
+            fetchApi(id);
+        }
+    }, [id]);
 
     return (
         <LoadingOverlayWrapper

@@ -18,6 +18,7 @@ function App() {
 
     useEffect(() => {
         const fetchApi = async () => {
+            console.log('fetch API');
             const usersResponse = await services.getUserList();
             setUserListData(usersResponse.data);
 
@@ -30,6 +31,7 @@ function App() {
             const revenueYearlyData = await services.getRevenueYearly(new Date().getFullYear());
             setRevenueYearlyData(revenueYearlyData.data);
             setLoading(false);
+            console.log(revenueYearlyData.data);
         };
 
         fetchApi();
@@ -51,6 +53,7 @@ function App() {
                 <Route
                     key={index}
                     path={route.path}
+                    exact
                     element={
                         <Layout>
                             <Page {...data} />
