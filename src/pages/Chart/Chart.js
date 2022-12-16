@@ -15,7 +15,7 @@ const options = [
     { label: new Date().getFullYear() - 2, value: new Date().getFullYear() - 2 },
 ];
 
-export default memo(function Chart() {
+export default memo(function Chart({ revenueYearlyData = [], transactionListData = [], userListData = [] }) {
     const currentYear = useRef(options[0].value);
     const [revenueYearly, setRevenueYearly] = useState([]);
     const [newUserYearly, setNewUserYearly] = useState([]);
@@ -24,6 +24,7 @@ export default memo(function Chart() {
 
     const fetchApi = async () => {
         setLoading(true);
+
         let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
         const revenueRes = await services.getRevenueYearly(currentYear.current);
         let revenue = [];
@@ -36,13 +37,12 @@ export default memo(function Chart() {
 
         setRevenueYearly(revenue);
 
-        const usersRes = await services.getUserList();
         let usersChartData = [];
-
         for (let month = 0; month < 12; month++) {
             let count = 0;
-            usersRes.data.forEach((data) => {
+            userListData.forEach((data) => {
                 let createdAt = new Date(data.createdAt);
+                console.log(createdAt.getFullYear(), currentYear.current, createdAt.getMonth(), month);
                 if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
             });
             usersChartData.push({
@@ -52,11 +52,10 @@ export default memo(function Chart() {
         }
         setNewUserYearly(usersChartData);
 
-        const transactionsRes = await services.getTransactionList();
         let transactionsChartData = [];
         for (let month = 0; month < 12; month++) {
             let count = 0;
-            transactionsRes.data.forEach((data) => {
+            transactionListData.forEach((data) => {
                 let createdAt = new Date(data.createdAt);
                 if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
             });
@@ -71,11 +70,54 @@ export default memo(function Chart() {
     };
 
     useEffect(() => {
-        fetchApi();
-    }, []);
+        const handleData = () => {
+            let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
+            let revenue = [];
+            revenueYearlyData.forEach((data) => {
+                revenue.push({
+                    name: 'Tháng ' + data.month,
+                    'Doanh thu': Number(data.amount) * currencyRate,
+                });
+            });
+            setRevenueYearly(revenue);
+
+            let usersChartData = [];
+            for (let month = 0; month < 12; month++) {
+                let count = 0;
+                userListData.forEach((data) => {
+                    let createdAt = new Date(data.createdAt);
+                    if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
+                });
+                usersChartData.push({
+                    name: 'Tháng ' + Number(month + 1),
+                    'Người dùng mới': count,
+                });
+            }
+            setNewUserYearly(usersChartData);
+
+            let transactionsChartData = [];
+            for (let month = 0; month < 12; month++) {
+                let count = 0;
+                transactionListData.forEach((data) => {
+                    let createdAt = new Date(data.createdAt);
+                    if (createdAt.getFullYear() === currentYear.current && createdAt.getMonth() === month) count++;
+                });
+                transactionsChartData.push({
+                    name: 'Tháng ' + Number(month + 1),
+                    'Giao dịch mới': count,
+                });
+            }
+            setTransactionYearly(transactionsChartData);
+        };
+
+        if (revenueYearlyData.length > 0 && transactionListData.length > 0 && userListData.length > 0) {
+            handleData();
+            setLoading(false);
+        }
+    }, [revenueYearlyData, transactionListData, userListData]);
 
     const handleChangeYear = (e) => {
-        currentYear.current = e.target.value;
+        currentYear.current = Number(e.target.value);
         fetchApi();
     };
 

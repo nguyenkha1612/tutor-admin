@@ -1,21 +1,23 @@
 import className from 'classnames/bind';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import Chart from '~/components/Chart';
 import FeaturedInfo from '~/components/FeatureInfo';
-import WidgetSm from '~/components/WidgetSm';
 import WidgetLg from '~/components/WidgetLg';
-
-import * as services from '~/services/services';
-
-import styles from './Home.module.scss';
+import WidgetSm from '~/components/WidgetSm';
 import LoadingOverlay from 'react-loading-overlay-ts';
+import styles from './Home.module.scss';
 
 const cx = className.bind(styles);
 
 const widgetLgCol = ['Khách hàng', 'Ngày giao dịch', 'Số tiền', 'Trạng thái'];
 
-export default memo(function Home() {
+export default memo(function Home({
+    transactionListData = [],
+    courseListData = [],
+    userListData = [],
+    revenueYearlyData = [],
+}) {
     const [revenueYearly, setRevenueYearly] = useState([]);
     const [featureData, setFeatureData] = useState([]);
     const [userList, setUserList] = useState([]);
@@ -23,22 +25,20 @@ export default memo(function Home() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setLoading(true);
-        let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
+        const handleData = () => {
+            let currencyRate = Number(process.env.REACT_APP_CURRENCY_RATE);
 
-        let currentDate = new Date();
-        let lastMonth = new Date();
+            let currentDate = new Date();
+            let lastMonth = new Date();
 
-        lastMonth.setMonth(currentDate.getMonth() - 1);
-        lastMonth = lastMonth.getMonth();
+            lastMonth.setMonth(currentDate.getMonth() - 1);
+            lastMonth = lastMonth.getMonth();
 
-        const fetchApiFeatureInfo = async () => {
-            const revenueRes = await services.getRevenueYearly(currentDate.getFullYear());
             let revenue = [];
             let revenueThisMonth;
             let revenueLastMonth;
 
-            revenueRes.data.forEach((data) => {
+            revenueYearlyData.forEach((data) => {
                 revenue.push({
                     name: 'Tháng ' + data.month,
                     'Doanh thu': Number(data.amount) * currencyRate,
@@ -62,12 +62,9 @@ export default memo(function Home() {
                 featuredSub: 'So với tháng trước',
             });
 
-            const courseRes = await services.getCourseList();
-            let courses = courseRes.data.data;
-
             let newCoursesThisMonth = 0;
             let newCoursesLastMonth = 0;
-            courses.forEach((course) => {
+            courseListData.forEach((course) => {
                 let courseStartDate = new Date(course.classRequirement.dateStart);
                 if (courseStartDate.getMonth() === currentDate.getMonth()) newCoursesThisMonth++;
                 if (courseStartDate.getMonth() === lastMonth) newCoursesLastMonth++;
@@ -82,12 +79,10 @@ export default memo(function Home() {
                 featuredSub: 'So với tháng trước',
             });
 
-            const transactionRes = await services.getTransactionList();
-
             let transactionsThisMonth = 0;
             let transactionsLastMonth = 0;
 
-            transactionRes.data.forEach((transaction) => {
+            transactionListData.forEach((transaction) => {
                 let transactionDate = new Date(transaction.createdAt);
                 if (transactionDate.getMonth() === currentDate.getMonth()) transactionsThisMonth++;
                 if (transactionDate.getMonth() === lastMonth) transactionsLastMonth++;
@@ -102,8 +97,9 @@ export default memo(function Home() {
                 featuredSub: 'So với tháng trước',
             });
 
+            const sortedTransactionList = [...transactionListData];
             setTransactionList(
-                transactionRes.data
+                sortedTransactionList
                     .sort(function (a, b) {
                         return b.createdAt - a.createdAt;
                     })
@@ -111,14 +107,10 @@ export default memo(function Home() {
             );
 
             setFeatureData(feature);
-            setLoading(false);
-        };
 
-        const fetchApiRecentlyUser = async () => {
-            const userListRes = await services.getUserList();
-
+            const sortedUserList = [...userListData];
             setUserList(
-                userListRes.data
+                sortedUserList
                     .sort(function (a, b) {
                         return b.createdAt - a.createdAt;
                     })
@@ -126,9 +118,16 @@ export default memo(function Home() {
             );
         };
 
-        fetchApiRecentlyUser();
-        fetchApiFeatureInfo();
-    }, []);
+        if (
+            transactionListData.length > 0 &&
+            revenueYearlyData.length > 0 &&
+            courseListData.length > 0 &&
+            userListData.length > 0
+        ) {
+            handleData();
+            setLoading(false);
+        }
+    }, [courseListData, revenueYearlyData, transactionListData, userListData]);
 
     return (
         <LoadingOverlay

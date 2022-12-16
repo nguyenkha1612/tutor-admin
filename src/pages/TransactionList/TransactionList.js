@@ -1,8 +1,8 @@
 import className from 'classnames/bind';
 import { memo, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import DataGrid from '~/components/DataGrid';
 import LoadingOverlay from 'react-loading-overlay-ts';
+import { Link } from 'react-router-dom';
+import DataGrid from '~/components/DataGrid';
 
 import * as services from '~/services/services';
 import { handleDateTime, handleQuantity } from '~/utils/commonFunc';
@@ -11,7 +11,6 @@ import styles from './TransactionList.module.scss';
 const cx = className.bind(styles);
 
 function TransactionList() {
-    const location = useLocation();
     const currentPage = useRef(1);
     const [data, setData] = useState([]);
 
@@ -20,9 +19,15 @@ function TransactionList() {
         setData((prev) => [...prev, ...res.data]);
     };
 
+    // useEffect(() => {
+    //     if (transactionListData.length > 0) {
+    //         setData(transactionListData);
+    //         setLoading(false);
+    //     }
+    // }, [transactionListData]);
+
     useEffect(() => {
-        if (location.state?.transactionList) setData(location.state.transactionList);
-        else fetchApi();
+        fetchApi();
     }, []);
 
     const columns = [
@@ -129,7 +134,11 @@ function TransactionList() {
                 }),
             }}
         >
-            <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
+            {data.length > 0 ? (
+                <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
+            ) : (
+                <></>
+            )}
         </LoadingOverlay>
     );
 }

@@ -1,6 +1,6 @@
 import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import LoadingOverlay from 'react-loading-overlay-ts';
 import DataGrid from '~/components/DataGrid';
@@ -11,18 +11,24 @@ import styles from './UserList.module.scss';
 const cx = className.bind(styles);
 
 export default memo(function UserList() {
-    const location = useLocation();
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const fetchApi = async (page) => {
-        const res = await services.getUserList(page);
-        console.log(res.data);
+    // useEffect(() => {
+    //     if (userListData.length > 0) {
+    //         setData(userListData);
+    //         setLoading(false);
+    //     }
+    // }, [userListData]);
+
+    const fetchApi = async () => {
+        const res = await services.getUserList();
         setData((prev) => [...prev, ...res.data]);
+        setLoading(false);
     };
 
     useEffect(() => {
-        if (location.state?.userList) setData(location.state.userList);
-        else fetchApi();
+        fetchApi();
     }, []);
 
     const columns = [
@@ -78,7 +84,7 @@ export default memo(function UserList() {
 
     return (
         <LoadingOverlay
-            active={data.length === 0}
+            active={loading}
             spinner
             text="Loading..."
             className={cx('userList')}
@@ -97,7 +103,7 @@ export default memo(function UserList() {
                 }),
             }}
         >
-            <DataGrid rows={data} disableSelectionOnClick columns={columns} />
+            {!loading ? <DataGrid rows={data} disableSelectionOnClick columns={columns} /> : <></>}
         </LoadingOverlay>
     );
 });

@@ -1,33 +1,14 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import config from '~/config';
 
-import * as services from '~/services/services';
 import styles from './SideBar.module.scss';
 
 const cx = classNames.bind(styles);
 
 function SideBar() {
-    const [transactionList, setTransactionList] = useState([]);
-    const [courseList, setCourseList] = useState([]);
-    const [userList, setUserList] = useState([]);
     const [dashboard, setDashboard] = useState(config.dashboard);
-
-    useEffect(() => {
-        const fetchApi = async () => {
-            const usersResponse = await services.getUserList();
-            setUserList(usersResponse.data);
-
-            const transactionsResponse = await services.getTransactionList(1);
-            setTransactionList(transactionsResponse.data);
-
-            const coursesResponse = await services.getCourseList();
-            setCourseList(coursesResponse.data.data);
-        };
-
-        fetchApi();
-    }, []);
 
     const handleLink = (dataTitle, itemTitle) => {
         let newDashboard = [...dashboard];
@@ -54,11 +35,6 @@ function SideBar() {
                                             to={item.link}
                                             className={cx('link')}
                                             onClick={() => handleLink(data.title, item.title)}
-                                            state={{
-                                                transactionList: transactionList,
-                                                courseList: courseList,
-                                                userList: userList,
-                                            }}
                                         >
                                             {item.active ? (
                                                 <li className={cx('sidebarListItem', 'active')}>

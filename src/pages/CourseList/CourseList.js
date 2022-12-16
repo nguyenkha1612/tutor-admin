@@ -1,26 +1,31 @@
 import className from 'classnames/bind';
 import { memo, useEffect, useRef, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import DataGrid from '~/components/DataGrid';
 import * as services from '~/services/services';
 import { handleQuantity } from '~/utils/commonFunc';
 import styles from './CourseList.module.scss';
+
 const cx = className.bind(styles);
 
 function CourseList() {
-    const location = useLocation();
+    const currentPage = useRef(1);
     const [data, setData] = useState([]);
-    // const currentPage = useRef(1);
+    const [loading, setLoading] = useState(true);
 
     const fetchApi = async (page) => {
         const res = await services.getCourseList(page);
         setData((prev) => [...prev, ...res.data.data]);
+        setLoading(false);
     };
 
+    // useEffect(() => {
+    //     if (courseListData.length > 0) setData(courseListData);
+    // }, [courseListData]);
+
     useEffect(() => {
-        if (location.state?.courseList) setData(location.state.courseList);
-        else fetchApi();
+        fetchApi();
     }, []);
 
     const columns = [
@@ -58,7 +63,7 @@ function CourseList() {
             renderCell: (params) => {
                 return (
                     <>
-                        <Link to={'/course/' + params.row.id} state={{ data: params.row }}>
+                        <Link to={'/course/' + params.row.id}>
                             <button className={cx('dataGridEditBtn')}>View</button>
                         </Link>
                     </>
@@ -67,16 +72,16 @@ function CourseList() {
         },
     ];
 
-    // const onPageChange = (e) => {
-    //     if (!(e < currentPage.current)) {
-    //         currentPage.current = e + 1;
-    //         fetchApi(currentPage.current);
-    //     }
-    // };
+    const onPageChange = (e) => {
+        if (!(e < currentPage.current)) {
+            currentPage.current = e + 1;
+            fetchApi(currentPage.current);
+        }
+    };
 
     return (
         <LoadingOverlay
-            active={data.length === 0}
+            active={loading}
             spinner
             text="Loading..."
             className={cx('courseList')}
@@ -95,12 +100,11 @@ function CourseList() {
                 }),
             }}
         >
-            <DataGrid
-                rows={data}
-                columns={columns}
-                disableSelectionOnClick
-                // onPageChange={(e) => onPageChange(e)}
-            />
+            {!loading ? (
+                <DataGrid rows={data} columns={columns} disableSelectionOnClick onPageChange={(e) => onPageChange(e)} />
+            ) : (
+                <></>
+            )}
         </LoadingOverlay>
     );
 }
