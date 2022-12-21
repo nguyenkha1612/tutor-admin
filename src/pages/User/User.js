@@ -1,5 +1,4 @@
 import {
-    AccountBalanceWalletOutlined,
     CalendarToday,
     LocationOnOutlined,
     MailOutline,
@@ -12,11 +11,11 @@ import {
 import className from 'classnames/bind';
 import { memo, useEffect, useState } from 'react';
 import LoadingOverlay from 'react-loading-overlay-ts';
-import WidgetLg from '~/components/WidgetLg';
-import { handleDate, handleDateTime, handleGender, handleLevel } from '~/utils/commonFunc';
-import styles from './User.module.scss';
-import * as services from '~/services/services';
 import { useParams } from 'react-router-dom';
+import WidgetLg from '~/components/WidgetLg';
+import * as services from '~/services/services';
+import { handleDate, handleGender, handleLevel } from '~/utils/commonFunc';
+import styles from './User.module.scss';
 
 const cx = className.bind(styles);
 
@@ -201,34 +200,6 @@ export default memo(function User({ userListData = [], transactionListData = [] 
                                                 </div>
                                             );
                                         })
-                                    ) : (
-                                        <></>
-                                    )}
-                                    <span className={cx('userShowTitle')}>Ví khách hàng</span>
-                                    {transactions.length === 0 ? (
-                                        <div className={cx('userShowInfo')}>
-                                            <span>Người dùng chưa thực hiện giao dịch nào.</span>
-                                        </div>
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {transactions.length > 0 ? (
-                                        <div className={cx('userShowInfo')}>
-                                            <AccountBalanceWalletOutlined className={cx('userShowIcon')} />
-                                            <span className={cx('userShowInfoTitle')}>
-                                                Coin: {transactions[0].oldBalance - transactions[0].amount}
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {transactions.length > 0 ? (
-                                        <div className={cx('userShowInfo')}>
-                                            <CalendarToday className={cx('userShowIcon')} />
-                                            <span className={cx('userShowInfoTitle')}>
-                                                Giao dịch gần nhất: {handleDateTime(transactions[0].createdAt)}
-                                            </span>
-                                        </div>
                                     ) : (
                                         <></>
                                     )}
