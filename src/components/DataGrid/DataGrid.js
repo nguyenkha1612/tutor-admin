@@ -39,6 +39,7 @@ function DataGrid({
     disableSelectionOnClick = false,
     checkboxSelection = false,
     onPageChange,
+    getRowId,
 }) {
     return (
         <StripedDataGrid
@@ -60,6 +61,7 @@ function DataGrid({
                 },
             }}
             onPageChange={onPageChange}
+            getRowId={getRowId}
         />
     );
 }

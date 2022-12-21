@@ -121,3 +121,12 @@ export const getTransactionByUserId = async (id) => {
         console.log(error);
     }
 };
+
+export const getBalanceList = async () => {
+    try {
+        const res = await instance.get(`/v1/payment/balance/all`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
