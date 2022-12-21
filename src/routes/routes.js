@@ -9,6 +9,7 @@ import TransactionList from '~/pages/TransactionList';
 import Transaction from '~/pages/Transaction';
 import Chart from '~/pages/Chart';
 import Login from '~/pages/Login';
+import Wallet from '~/pages/Wallet';
 
 export const publicRoutes = [
     {
@@ -74,5 +75,9 @@ export const privateRoutes = [
         path: config.routes.logout,
         component: Login,
         layout: HeadlessLayout,
+    },
+    {
+        path: config.routes.wallet,
+        component: Wallet,
     },
 ];

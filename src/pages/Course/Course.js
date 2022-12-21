@@ -190,7 +190,7 @@ export default memo(function Course({ courseListData = [] }) {
                                     <div className={cx('courseShowInfo')}>
                                         <AccessTimeOutlined className={cx('courseShowIcon')} />
                                         <span className={cx('courseShowInfoTitle')}>
-                                            Số giờ học: {handleTime(data.classRequirement.timeLesson)}
+                                            Số giờ học: {Number(data.classRequirement.timeLesson) / 60 + ' phút/buổi'}
                                         </span>
                                     </div>
                                 ) : (

@@ -1,4 +1,4 @@
-import { AttachMoney, Home, PermIdentity, School, Timeline } from '@mui/icons-material';
+import { AccountBalanceWalletOutlined, AttachMoney, Home, PermIdentity, School, Timeline } from '@mui/icons-material';
 
 const dashboard = [
     {
@@ -26,6 +26,12 @@ const dashboard = [
                 active: false,
                 title: 'Tài khoản người dùng',
                 icon: <PermIdentity className={'sidebarIcon'} />,
+            },
+            {
+                link: '/wallets',
+                active: false,
+                title: 'Ví khách hàng',
+                icon: <AccountBalanceWalletOutlined className={'sidebarIcon'} />,
             },
             {
                 link: '/courses',

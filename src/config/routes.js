@@ -10,6 +10,7 @@ const routes = {
     chart: '/chart',
     login: '/login',
     logout: '/logout',
+    wallet: '/wallets',
 };
 
 export default routes;
