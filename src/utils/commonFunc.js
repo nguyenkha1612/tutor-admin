@@ -95,3 +95,16 @@ export const handleStatusCourse = (text) => {
     else if (text.toLowerCase() === 'teaching') return 'Đã nhận lớp';
     else return text;
 };
+
+export const handleTime = (minute) => {
+    let result = '';
+    minute = Number(minute);
+    if (minute < 60) result = minute + ' phút';
+    else {
+        let hours = Math.floor(Number(minute) / 60);
+        let minuteLeft = minute - hours * 60;
+        if (minuteLeft === 0) result = hours + ' giờ';
+        else result = hours + ' giờ ' + minuteLeft + ' phút';
+    }
+    return result;
+};
