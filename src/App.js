@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useState } from 'react';
-import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from '~/layouts';
@@ -14,7 +13,6 @@ function App() {
     const [courseListData, setCourseListData] = useState([]);
     const [userListData, setUserListData] = useState([]);
     const [revenueYearlyData, setRevenueYearlyData] = useState([]);
-    // const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -30,7 +28,6 @@ function App() {
 
             const revenueYearlyData = await services.getRevenueYearly(new Date().getFullYear());
             setRevenueYearlyData(revenueYearlyData.data);
-            // setLoading(false);
             console.log(revenueYearlyData.data);
         };
 

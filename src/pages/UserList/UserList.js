@@ -14,15 +14,9 @@ export default memo(function UserList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     if (userListData.length > 0) {
-    //         setData(userListData);
-    //         setLoading(false);
-    //     }
-    // }, [userListData]);
-
     const fetchApi = async () => {
         const res = await services.getUserList();
+        console.log(res.data);
         setData((prev) => [...prev, ...res.data]);
         setLoading(false);
     };
