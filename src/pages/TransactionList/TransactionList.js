@@ -16,15 +16,9 @@ function TransactionList() {
 
     const fetchApi = async (page) => {
         const res = await services.getTransactionList(page);
+        console.log(res.data);
         setData((prev) => [...prev, ...res.data]);
     };
-
-    // useEffect(() => {
-    //     if (transactionListData.length > 0) {
-    //         setData(transactionListData);
-    //         setLoading(false);
-    //     }
-    // }, [transactionListData]);
 
     useEffect(() => {
         fetchApi();
